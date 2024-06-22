@@ -16,6 +16,8 @@ function search() {
                 const url = "https://" + selectedEngine + ".com/search?q=" + query;
                 window.open(url);
             }
+        } else {
+            window.open("search.html?#gsc.q=" + query + "&#gsc.tab=0");
         }
     });
 }

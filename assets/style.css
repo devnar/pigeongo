@@ -65,13 +65,12 @@ body {
 }
 
 .logo {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     background-image: url("https://devnar.github.io/logos/pigeongo.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    margin: 0 40px;
 }
 
 .search-bar {

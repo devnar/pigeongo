@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PigeonGo</title>
+    <link rel="shortcut icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/gsc.css">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
+</head>
+<body style="align-items: flex-start;margin: 20px;padding: 0;display: flex;height: 100vh;font-family: Arial, sans-serif;background-color: #fff;position: relative;color: #2b292a;justify-content: center;align-content: flex-start;flex-wrap: wrap;">
+    <div class="container">
+        <div class="top-section">
+            
+        </div>
+        <form class="search-bar" onsubmit="search()">
+            <div class="logo-mini"></div>
+            <input id="query" type="text" placeholder="Arama yapın..." />
+            <button>
+                <i class="bx bx-search"></i>
+            </button>
+        </form>
+        <div class="gcse-searchresults-only"></div>
+    </div>
+    <script async src="https://cse.google.com/cse.js?cx=f1bb0107d172049ff"></script>
+    <script>
+        function search() {
+            var q = document.getElementById("query").value;
+            window.location.href = "?#gsc.q=" + q + "&#gsc.tab=0";
+        }
+    </script>
+</body>
+</html>
