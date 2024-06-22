@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PigeonGo</title>
+    <link rel="shortcut icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/x-icon">
+    <link rel="stylesheet" href="assets/style.css">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="top-section">
+            <div class="info-panel left-panel">
+                <img id="weather-icon" ></img>
+                <p id="weather-temp">25°C</p>
+            </div>
+            <div class="logo"></div>
+            <div class="info-panel right-panel">
+                <i class='bx bx-cog'></i>
+            </div>
+        </div>
+        <form class="search-bar" onsubmit="search()">
+            <input id="query" type="text" placeholder="Arama yapın..." />
+            <button>
+                <i class="bx bx-search"></i>
+            </button>
+        </form>
+        <div class="badges">
+            <input type="radio" id="google" name="engine" value="google">
+            <label class="badge" for="google">Google</label><br>
+            <input type="radio" id="duckduckgo" name="engine" value="duckduckgo">
+            <label class="badge" for="duckduckgo">DuckDuckGo</label><br>
+            <input type="radio" id="bing" name="engine" value="bing">
+            <label class="badge" for="bing">Bing</label>
+            <input type="radio" id="yahoo" name="engine" value="yahoo">
+            <label class="badge" for="yahoo">Yahoo</label>
+        </div>
+    </div>
+    <script src="assets/script.js"></script>
+</body>
+</html>
