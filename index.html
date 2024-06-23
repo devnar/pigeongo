@@ -20,20 +20,20 @@
                 <i class='bx bx-cog'></i>
             </div>
         </div>
-        <form class="search-bar" onsubmit="search()">
+        <form id="searchForm" class="search-bar">
             <input id="query" type="text" placeholder="Arama yapın..." />
             <button>
                 <i class="bx bx-search"></i>
             </button>
         </form>
         <div class="badges">
-            <input type="radio" id="google" name="engine" value="google">
+            <input type="radio" id="google" name="engine" value="https://google.com/search?q=">
             <label class="badge" for="google">Google</label><br>
-            <input type="radio" id="duckduckgo" name="engine" value="duckduckgo">
+            <input type="radio" id="duckduckgo" name="engine" value="https://duckduckgo.com/?q=">
             <label class="badge" for="duckduckgo">Duck</label><br>
-            <input type="radio" id="bing" name="engine" value="bing">
+            <input type="radio" id="bing" name="engine" value="https://www.bing.com/search?q=">
             <label class="badge" for="bing">Bing</label>
-            <input type="radio" id="yahoo" name="engine" value="yahoo">
+            <input type="radio" id="yahoo" name="engine" value="https://search.yahoo.com/search?q=">
             <label class="badge" for="yahoo">Yahoo</label>
         </div>
     </div>

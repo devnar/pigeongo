@@ -1,26 +1,23 @@
-function search() {
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+    event.preventDefault();
     const radioButtons = document.querySelectorAll('input[type="radio"][name="engine"]');
     const query = document.getElementById('query').value;
-
     let selectedEngine = null;
-    radioButtons.forEach(radio => {
+
+    for (let radio of radioButtons) {
         if (radio.checked) {
             selectedEngine = radio.value;
-            if (selectedEngine == "duckduckgo") {
-                const url = "https://" + selectedEngine + ".com/?q=" + query;
-                window.open(url);
-            } else if (selectedEngine == "yahoo") {
-                const url = "https://search." + selectedEngine + ".com/search?q=" + query;
-                window.open(url);
-            } else {
-                const url = "https://" + selectedEngine + ".com/search?q=" + query;
-                window.open(url);
-            }
-        } else {
-            window.open("search.html?#gsc.q=" + query + "&#gsc.tab=0");
+            break;
         }
-    });
-}
+    }
+
+    if (selectedEngine) {
+        const url = selectedEngine + query;
+        window.location.href = url;
+    } else {
+        window.location.href = "search.html?#gsc.q=" + query + "&#gsc.tab=0";
+    }
+});
 
 const apiUrl = "https://api.weatherapi.com/v1/current.json?q=Istanbul&key=ec7b315cf3694b0f801133734242206";
 
@@ -52,7 +49,7 @@ radioButtons.forEach(radio => {
     });
 
     if (this.checked) {
-        document.querySelector(`label[for="${this.value}"]`).classList.add('badge-check');
+        document.querySelector(`label[for="${this.id}"]`).classList.add('badge-check');
     }
   });
 });
