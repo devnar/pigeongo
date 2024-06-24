@@ -1,6 +1,5 @@
 body {
-  margin: 20px;
-  padding: 0;
+  padding-right: 20px;
   display: flex;
   height: 100vh;
   font-family: Arial, sans-serif;
