@@ -13,6 +13,7 @@ body {
 
 .container {
     width: 100%;
+    height: 60%;
     text-align: center;
     z-index: 1;
 }
@@ -75,7 +76,6 @@ body {
     background-color: #fff;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
     text-align: left;
 }
 
@@ -94,7 +94,6 @@ body {
 
 .sidebar .closebtn {
     position: absolute;
-    top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
@@ -102,6 +101,7 @@ body {
 
 .sidebar-section {
     padding: 15px;
+    padding-top: 0;
 }
 
 .sidebar-section h2 {
