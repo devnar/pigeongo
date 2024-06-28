@@ -109,7 +109,7 @@
                         <option value="yozgat">Yozgat</option>
                         <option value="zonguldak">Zonguldak</option>
                     </select>
-                    <br><br>
+                    <br>
                     <label for="theme">Tema:</label>
                     <select id="theme" name="theme">
                         <option value="light">Açık Tema</option>
@@ -119,7 +119,8 @@
             </div>
             <div class="sidebar-section">
                 <h2>PigeonGo</h2>
-                <p>Arama motoru hakkında bilgiler burada yer alacak.</p>
+                <p>Pigeongo'yu seçin ve internette özgürce gezmenin tadını çıkarın.</p>
+                <button onclick="window.location.href = 'https://github.com/devnar/pigeongo/blob/main/README.md'">Amacımızı Oku</button>
             </div>
         </div>
         <form id="searchForm" class="search-bar">
@@ -129,14 +130,14 @@
             </button>
         </form>
         <div class="badges">
-            <input type="radio" id="google" name="engine" value="https://google.com/search?q=">
-            <label class="badge" for="google">Google</label><br>
-            <input type="radio" id="duckduckgo" name="engine" value="https://duckduckgo.com/?q=">
-            <label class="badge" for="duckduckgo">Duck</label><br>
-            <input type="radio" id="bing" name="engine" value="https://www.bing.com/search?q=">
-            <label class="badge" for="bing">Bing</label>
-            <input type="radio" id="yahoo" name="engine" value="https://search.yahoo.com/search?q=">
-            <label class="badge" for="yahoo">Yahoo</label>
+            <input type="radio" id="web" name="engine" value="">
+            <label class="badge" for="web">Web</label><br>
+            <input type="radio" id="news" name="engine" value="&gsc.ref=more%3Anews">
+            <label class="badge" for="news">Haber</label>
+            <input type="radio" id="shop" name="engine" value="&gsc.ref=more%3Ashop">
+            <label class="badge" for="shop">Alışveriş</label>
+            <input type="radio" id="info" name="engine" value="&gsc.ref=more%3Ainfo">
+            <label class="badge" for="info">Bilgi</label>
         </div>
     </div>
     <script src="assets/script.js"></script>

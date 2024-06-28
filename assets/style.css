@@ -137,6 +137,8 @@ body {
 }
 
 .sidebar-section button {
+    width: 100%;
+    background: #fcc41d;
     padding: 10px;
     font-size: 18px;
     color: white;

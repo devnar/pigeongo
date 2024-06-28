@@ -2,17 +2,17 @@ document.getElementById('searchForm').addEventListener('submit', function(event)
     event.preventDefault();
     const radioButtons = document.querySelectorAll('input[type="radio"][name="engine"]');
     const query = document.getElementById('query').value;
-    let selectedEngine = null;
+    let selectedOption = null;
 
     for (let radio of radioButtons) {
         if (radio.checked) {
-            selectedEngine = radio.value;
+            selectedOption = radio.value;
             break;
         }
     }
 
-    if (selectedEngine) {
-        const url = selectedEngine + query;
+    if (selectedOption) {
+        const url = "search.html?##gsc.tab=0&gsc.q="+ query +"&gsc.tab=0&gsc.sort=&gsc.page=1"+ selectedOption;
         window.location.href = url;
     } else {
         window.location.href = "search.html?#gsc.q=" + query + "&#gsc.tab=0";
@@ -53,6 +53,7 @@ radioButtons.forEach(radio => {
         document.querySelector(`label[for="${this.id}"]`).classList.add('badge-check');
     }
   });
+  document.getElementById("web").click();
 });
 
 function openNav() {
@@ -69,6 +70,7 @@ function saveSelectedCity() {
     const selectElement = document.getElementById("country");
     const selectedCity = selectElement.options[selectElement.selectedIndex].value;
     localStorage.setItem('selectedCity', selectedCity);
+    window.location.reload();
 }
 
 function loadSelectedCity() {
