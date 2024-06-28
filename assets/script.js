@@ -19,7 +19,8 @@ document.getElementById('searchForm').addEventListener('submit', function(event)
     }
 });
 
-const apiUrl = "https://api.weatherapi.com/v1/current.json?q=Istanbul&key=ec7b315cf3694b0f801133734242206";
+const country = localStorage.getItem('selectedCity');
+const apiUrl = "https://api.weatherapi.com/v1/current.json?q=" + country + "&key=ec7b315cf3694b0f801133734242206";
 
 fetch(apiUrl)
     .then((response) => {
@@ -53,3 +54,38 @@ radioButtons.forEach(radio => {
     }
   });
 });
+
+function openNav() {
+    document.getElementById("sidebar").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+}
+
+function saveSelectedCity() {
+    const selectElement = document.getElementById("country");
+    const selectedCity = selectElement.options[selectElement.selectedIndex].value;
+    localStorage.setItem('selectedCity', selectedCity);
+}
+
+function loadSelectedCity() {
+    const selectedCity = localStorage.getItem('selectedCity');
+    if (selectedCity) {
+        const selectElement = document.getElementById("country");
+        for (let i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === selectedCity) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    loadSelectedCity();
+});
+
+document.getElementById("country").addEventListener('change', saveSelectedCity);
