@@ -91,3 +91,48 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 document.getElementById("country").addEventListener('change', saveSelectedCity);
+
+function saveSelectedTheme() {
+    const selectElement = document.getElementById("country");
+    const selectedTheme = selectElement.options[selectElement.selectedIndex].value;
+    localStorage.setItem('theme', selectedTheme);
+    window.location.reload();
+}
+
+function loadSelectedTheme() {
+    const selectedTheme = localStorage.getItem('theme');
+    if (selectedTheme) {
+        const selectElement = document.getElementById("theme");
+        for (let i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === selectedTheme) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+function saveSelectedTheme() {
+    const selectElement = document.getElementById("theme");
+    const selectedTheme = selectElement.options[selectElement.selectedIndex].value;
+    localStorage.setItem('theme', selectedTheme);
+    window.location.reload();
+}
+
+function loadSelectedTheme() {
+    const selectedTheme = localStorage.getItem('theme');
+    if (selectedTheme) {
+        const selectElement = document.getElementById("theme");
+        for (let i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === selectedTheme) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    loadSelectedTheme();
+});
+document.getElementById("theme").addEventListener('change', saveSelectedTheme);

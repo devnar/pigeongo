@@ -16,7 +16,7 @@
     <meta name="revisit-after" content="1 days">
     <!-- Link -->
     <link rel="shortcut icon" type="image/png" href="https://devnar.github.io/logos/pigeongo.png">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" id="themeLink" href="assets/dark.css">
     <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
 </head>
 <body>
@@ -123,8 +123,8 @@
                     <br>
                     <label for="theme">Tema:</label>
                     <select id="theme" name="theme">
-                        <option value="light">Açık Tema</option>
-                        <option value="dark" disabled>Koyu Tema</option>
+                        <option value="false">Açık Tema</option>
+                        <option value="true">Koyu Tema</option>
                     </select>
                 </form>
             </div>
@@ -152,5 +152,12 @@
         </div>
     </div>
     <script src="assets/script.js"></script>
+    <script>
+        if (localStorage.getItem("theme") == "true") {
+            document.getElementById("themeLink").href = "assets/dark.css"
+        } else {
+            document.getElementById("themeLink").href = "assets/light.css"
+        }
+    </script>
 </body>
 </html>
