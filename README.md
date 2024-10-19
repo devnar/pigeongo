@@ -1,4 +1,4 @@
-# pigeongo
+# PigeonGo
  
 Günümüzde pek çok arama motoru, kullanıcıların gizliliğini yeterince önemsememekte ve kişisel verileri üçüncü şahıslarla paylaşmaktadır. Bu durum, kullanıcıların arama geçmişlerinden ilgi alanlarına kadar birçok bilgiyi açığa çıkarmakta ve mahremiyetlerini tehlikeye atmaktadır. Büyük şirketler, bu verileri reklam amaçlı kullanarak kişiselleştirilmiş reklamlar sunmakta ve kullanıcıların dijital izlerini takip etmektedir.
 
