@@ -6,7 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: #2b292a;
+    background-color: #161616;
     position: relative;
     color: #fff;
 }
@@ -30,7 +30,7 @@ body {
     top: 20px;
     width: 80px;
     padding: 10px;
-    background-color: #2b292a;
+    background-color: #161616;
     border: 1px solid #fcc41d;
     border-radius: 8px;
     display: flex;
@@ -73,7 +73,7 @@ body {
     top: 0;
     right: 0;
     border-left: 1px solid #fcc41d;
-    background-color: #2b292a;
+    background-color: #161616;
     overflow-x: hidden;
     transition: 0.5s;
     text-align: left;
@@ -128,6 +128,8 @@ body {
 
 .sidebar-section select,
 .sidebar-section input {
+    color: white;
+    background-color: #161616;
     border: 1px solid #fcc41d;
     margin-bottom: 16px;
     padding: 10px;
@@ -141,7 +143,6 @@ body {
     background: #fcc41d;
     padding: 10px;
     font-size: 18px;
-    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -171,7 +172,7 @@ body {
     border-radius: 24px 0 0 24px;
     font-size: 16px;
     outline: none;
-    background-color: #2b292a;
+    background-color: #161616;
     color: #fff;
 }
 
@@ -188,7 +189,7 @@ body {
 }
 
 .search-bar button i {
-    color: #2b292a;
+    color: #161616;
     font-size: 20px;
 }
 
@@ -218,7 +219,7 @@ body {
 
 .badge:hover {
     background-color: #fcc41d;
-    color: #2b292a;
+    color: #161616;
     padding: 10px 20px;
     border-radius: 12px;
     font-size: 14px;
@@ -226,7 +227,7 @@ body {
 
 .badge-check {
     background-color: #fcc41d;
-    color: #2b292a;
+    color: #161616;
     padding: 10px 20px;
     border-radius: 12px;
     font-size: 14px;
