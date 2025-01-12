@@ -16,7 +16,7 @@
         <meta name="revisit-after" content="1 days">
         <!-- Link -->
         <link rel="shortcut icon" type="image/png" href="https://devnar.github.io/logos/pigeongo.png">
-        <link rel="stylesheet" id="themeLink" href="assets/dgsc.css">
+        <link rel="stylesheet" id="themeLink" href="assets/gsc.css">
         <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
     </head>
 <body style="align-items: flex-start;margin: 20px;display: flex;height: 100vh;font-family: Arial, sans-serif;position: relative;justify-content: center;align-content: flex-start;flex-wrap: wrap;">
@@ -38,12 +38,6 @@
         function search() {
             var q = document.getElementById("query").value;
             window.location.href = "?#gsc.q=" + q + "&#gsc.tab=0";
-        }
-
-        if (localStorage.getItem("theme") == "true") {
-            document.getElementById("themeLink").href = "assets/dgsc.css"
-        } else {
-            document.getElementById("themeLink").href = "assets/lgsc.css"
         }
     </script>
 </body>

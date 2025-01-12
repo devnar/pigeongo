@@ -1,3 +1,17 @@
+:root {
+    --text-color: #2b292a;
+    --background-color: #fff;
+    --accent-color: #fcc41d;
+    --hover-color: #e6b517;
+}
+
+[data-theme="dark"] {
+    --text-color: #fff;
+    --background-color: #2b292a;
+    --accent-color: #fcc41d;
+    --hover-color: #e6b517;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -6,9 +20,9 @@ body {
     align-items: center;
     height: 100vh;
     font-family: Arial, sans-serif;
-    background-color: #fff;
+    background-color: var(--background-color);
     position: relative;
-    color: #2b292a;
+    color: var(--text-color);
 }
 
 .container {
@@ -30,14 +44,14 @@ body {
     top: 20px;
     width: 80px;
     padding: 10px;
-    background-color: #fff;
-    border: 1px solid #fcc41d;
+    background-color: var(--background-color);
+    border: 1px solid var(--accent-color);
     border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    color: #2b292a;
+    color: var(--text-color);
 }
 
 .info-panel img {
@@ -46,14 +60,14 @@ body {
 }
 
 .info-panel i {
-    color: #fcc41d;
+    color: var(--accent-color);
     font-size: 24px;
 }
 
 .info-panel p {
     margin: 0;
     font-size: 16px;
-    color: #2b292a;
+    color: var(--text-color);
 }
 
 .left-panel {
@@ -72,8 +86,8 @@ body {
     z-index: 1;
     top: 0;
     right: 0;
-    border-left: 1px solid #fcc41d;
-    background-color: #fff;
+    border-left: 1px solid var(--accent-color);
+    background-color: var(--background-color);
     overflow-x: hidden;
     transition: 0.5s;
     text-align: left;
@@ -83,7 +97,7 @@ body {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
-    color: #fcc41d;
+    color: var(--accent-color);
     display: block;
     transition: 0.3s;
 }
@@ -106,7 +120,7 @@ body {
 
 .sidebar-section h2 {
     padding: 15px;
-    border-bottom: 1px solid #fcc41d;
+    border-bottom: 1px solid var(--accent-color);
 }
 
 .sidebar-section:last-child {
@@ -123,22 +137,22 @@ body {
 .sidebar-section label {
     margin-bottom: 8px;
     font-size: 18px;
-    color: #2b292a;
+    color: var(--text-color);
 }
 
 .sidebar-section select,
 .sidebar-section input {
-    border: 1px solid #fcc41d;
+    border: 1px solid var(--accent-color);
     margin-bottom: 16px;
     padding: 10px;
     font-size: 16px;
-    outline: 1px solid #fcc41d;
+    outline: 1px solid var(--accent-color);
     border-radius: 4px;
 }
 
 .sidebar-section button {
     width: 100%;
-    background: #fcc41d;
+    background: var(--accent-color);
     padding: 10px;
     font-size: 18px;
     color: white;
@@ -167,19 +181,19 @@ body {
     width: 100%;
     max-width: 500px;
     padding: 15px 20px;
-    border: 1px solid #fcc41d;
+    border: 1px solid var(--accent-color);
     border-radius: 24px 0 0 24px;
     font-size: 16px;
     outline: none;
-    background-color: #fff;
-    color: #2b292a;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .search-bar button {
     padding: 15px 20px;
-    border: 1px solid #fcc41d;
+    border: 1px solid var(--accent-color);
     border-left: none;
-    background-color: #fcc41d;
+    background-color: var(--accent-color);
     border-radius: 0 24px 24px 0;
     cursor: pointer;
     display: flex;
@@ -188,7 +202,7 @@ body {
 }
 
 .search-bar button i {
-    color: #2b292a;
+    color: var(--text-color);
     font-size: 20px;
 }
 
@@ -209,24 +223,24 @@ body {
 }
 
 .badge {
-    border: 1px solid #fcc41d;
-    color: #2b292a;
+    border: 1px solid var(--accent-color);
+    color: var(--text-color);
     padding: 10px 20px;
     border-radius: 12px;
     font-size: 14px;
 }
 
 .badge:hover {
-    background-color: #fcc41d;
-    color: #2b292a;
+    background-color: var(--accent-color);
+    color: var(--text-color);
     padding: 10px 20px;
     border-radius: 12px;
     font-size: 14px;
 }
 
 .badge-check {
-    background-color: #fcc41d;
-    color: #2b292a;
+    background-color: var(--accent-color);
+    color: var(--text-color);
     padding: 10px 20px;
     border-radius: 12px;
     font-size: 14px;
