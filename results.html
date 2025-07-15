@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">pigeonGO - Arama Sonuçları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/tailwind.config.js"></script>
+    <link rel="icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/png">
+    <style>
+        body {
+            background-color: #1a1a1a;
+        }
+        .search-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 1px #fbbf24;
+        }
+        .result-item {
+            transition: all 0.3s ease;
+        }
+        .result-item:hover {
+            background-color: #3a3a3a;
+            transform: translateY(-2px);
+        }
+        .result-link:hover {
+            text-decoration: underline;
+        }
+        .pagination-btn {
+            transition: all 0.3s ease;
+        }
+        .pagination-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background-color: #374151;
+        }
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .filter-btn.active {
+            color: #fbbf24;
+            border-bottom: 2px solid #fbbf24;
+        }
+        .loading-spinner {
+            border: 3px solid #374151;
+            border-top: 3px solid #fbbf24;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .pigeon-gradient {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+        .pigeon-glass {
+            background: rgba(42, 42, 42, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-pigeon-dark text-text-primary">
+    <!-- Header with Search -->
+    <header class="border-b border-border-light p-4 sticky top-0 bg-pigeon-dark z-10 pigeon-glass">
+        <div class="max-w-6xl mx-auto flex items-center gap-6">
+            <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <img src="https://devnar.github.io/logos/pigeongo.png" alt="pigeonGO Logo" class="w-10 h-10 rounded">
+                <span class="text-xl font-light hidden md:block">
+                    Pigeon<span class="text-brand-yellow">Go</span>
+                </span>
+            </a>
+
+            <form id="searchForm" class="flex-1 max-w-2xl">
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="searchQuery"
+                        class="search-input w-full h-10 pl-4 pr-12 bg-pigeon-card border-2 border-border-medium text-text-primary placeholder-text-placeholder rounded-full focus:outline-none transition-all duration-300"
+                        placeholder="Arama yapın..."
+                    >
+                    <button
+                        type="submit"
+                        class="absolute right-1 top-1 h-8 w-8 bg-brand-yellow hover:bg-brand-yellow-hover text-black rounded-full flex items-center justify-center transition-colors"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- Search Filters -->
+    <div class="max-w-6xl mx-auto px-4 pt-3 border-b border-border-light">
+        <div class="flex gap-6 text-sm">
+            <button class="filter-btn active pb-2 transition-colors" onclick="setFilter('')">Tümü</button>
+            <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('image')">Görseller</button>
+            <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('news')">Haberler</button>
+            <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('shopping')">Alışveriş</button>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="hidden flex justify-center items-center py-8">
+        <div class="loading-spinner"></div>
+        <span class="ml-3 text-text-tertiary">Aranıyor...</span>
+    </div>
+
+    <!-- Search Results -->
+    <main class="max-w-6xl mx-auto p-4">
+        <div id="resultsInfo" class="mb-4 text-sm text-text-tertiary"></div>
+
+        <div id="results" class="space-y-6">
+            <!-- Results will be populated by JavaScript -->
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8">
+            <!-- Pagination will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-border-light mt-12 p-6">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-text-tertiary">
+            <div class="flex gap-6 flex-wrap justify-center">
+                <a href="#" class="hover:text-text-primary transition-colors">Hakkında</a>
+                <a href="#" class="hover:text-text-primary transition-colors">Gizlilik</a>
+                <a href="#" class="hover:text-text-primary transition-colors">Şartlar</a>
+            </div>
+            <div class="flex gap-6 flex-wrap justify-center">
+                <a href="#" class="hover:text-text-primary transition-colors">Yardım</a>
+                <a href="#" class="hover:text-text-primary transition-colors">Bağış</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const apiKey = atob("QUl6YVN5RDRjNlpsdkN5TkNFNk1hTTRjOWlIeE05VHJIcWhkbWk4");
+        const cx = "f1bb0107d172049ff";
+
+        // Search variables
+        let filter = "";
+        let history = JSON.parse(localStorage.getItem('pigeonGO_history') || '[]');
+        let currentPage = 1;
+        const resultsPerPage = 10;
+        let totalPages = 0;
+        let currentQuery = "";
+
+        // Get search query from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q') || '';
+        const isLucky = urlParams.get('lucky') === 'true';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            if (searchQuery) {
+                document.getElementById('searchQuery').value = searchQuery;
+                document.getElementById('pageTitle').textContent = `${searchQuery} - pigeonGO Arama Sonuçları`;
+                currentQuery = searchQuery;
+                search();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Set search filter
+        function setFilter(type) {
+            filter = type;
+            currentPage = 1;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('text-text-tertiary');
+            });
+            event.target.classList.add('active');
+            event.target.classList.remove('text-text-tertiary');
+            
+            search();
+        }
+
+        // Main search function
+        function search() {
+            const queryInput = document.getElementById("searchQuery");
+            const query = queryInput.value.trim() || currentQuery;
+            const loading = document.getElementById("loading");
+
+            if (!query) {
+                alert("Lütfen arama terimi girin.");
+                return;
+            }
+
+            // Add to history
+            if (!history.includes(query)) {
+                history.unshift(query);
+                if (history.length > 10) {
+                    history = history.slice(0, 10);
+                }
+                localStorage.setItem('pigeonGO_history', JSON.stringify(history));
+            }
+
+            currentQuery = query;
+
+            // Determine search query based on filter
+            let queryToSend = query;
+            if (filter === "news") {
+                queryToSend += " site:trthaber.com OR site:hurriyet.com.tr OR site:sabah.com.tr";
+            } else if (filter === "shopping") {
+                queryToSend += " site:amazon.com OR site:hepsiburada.com OR site:trendyol.com";
+            }
+
+            // Build API URL
+            let url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(queryToSend)}&start=${(currentPage - 1) * resultsPerPage + 1}`;
+            
+            if (filter === "image") {
+                url += "&searchType=image";
+            }
+
+            // Show loading
+            loading.classList.remove("hidden");
+            document.getElementById("results").innerHTML = "";
+
+            // Make API request
+            fetch(url)
+                .then((res) => res.json())
+                .then((data) => {
+                    loading.classList.add("hidden");
+                    displayResults(data);
+                })
+                .catch((err) => {
+                    loading.classList.add("hidden");
+                    console.error("Arama hatası:", err);
+                    document.getElementById("results").innerHTML = 
+                        '<div class="text-center py-8"><p class="text-accent-red">Arama sırasında bir hata oluştu. Lütfen API anahtarınızı kontrol edin.</p></div>';
+                });
+        }
+
+        // Display search results
+        function displayResults(data) {
+            const resultsDiv = document.getElementById("results");
+            const resultsInfo = document.getElementById("resultsInfo");
+            
+            resultsDiv.innerHTML = "";
+
+            if (!data.items || data.items.length === 0) {
+                resultsDiv.innerHTML = '<div class="text-center py-8"><p class="text-text-tertiary">Sonuç bulunamadı.</p></div>';
+                resultsInfo.textContent = "";
+                return;
+            }
+
+            // Show results info
+            const totalResults = parseInt(data.searchInformation?.totalResults || "0", 10);
+            const searchTime = parseFloat(data.searchInformation?.searchTime || "0").toFixed(2);
+            resultsInfo.textContent = `Yaklaşık ${totalResults.toLocaleString('tr-TR')} sonuç (${searchTime} saniye)`;
+
+            // Calculate total pages
+            totalPages = Math.min(Math.ceil(totalResults / resultsPerPage), 10);
+
+            // Display results
+            data.items.forEach((item) => {
+                const title = item.title;
+                const link = item.link;
+                const snippet = item.snippet;
+                const image = item.pagemap?.cse_image?.[0]?.src || "";
+
+                const resultItem = document.createElement("div");
+                resultItem.className = "result-item p-4 bg-pigeon-card rounded-lg shadow-lg hover:shadow-xl border border-border-light";
+
+                if (filter === "image") {
+                    resultItem.innerHTML = `
+                        <a href="${link}" target="_blank" rel="noopener noreferrer" class="block">
+                            <img src="${link}" alt="${title}" class="max-h-48 object-contain rounded mx-auto mb-2" onerror="this.style.display='none'">
+                            <p class="text-sm text-text-secondary text-center">${title}</p>
+                        </a>
+                    `;
+                } else {
+                    resultItem.innerHTML = `
+                        <div class="flex items-start gap-2 mb-1">
+                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-accent-green hover:text-accent-green-hover text-sm result-link break-all">
+                                ${link}
+                            </a>
+                            <svg class="w-3 h-3 text-text-muted mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl text-accent-blue hover:text-accent-blue-hover mb-2">
+                            <a href="${link}" class="result-link" target="_blank" rel="noopener noreferrer">
+                                ${title}
+                            </a>
+                        </h3>
+                        <p class="text-text-secondary text-sm leading-relaxed mb-2">${snippet}</p>
+                        ${image ? `<img src="${image}" alt="" class="mt-2 max-h-32 object-contain rounded border border-border-light" onerror="this.style.display='none'">` : ""}
+                    `;
+                }
+
+                resultsDiv.appendChild(resultItem);
+            });
+
+            updatePagination();
+
+            // Handle lucky search
+            if (isLucky && data.items.length > 0) {
+                setTimeout(() => {
+                    window.open(data.items[0].link, '_blank');
+                }, 1000);
+            }
+        }
+
+        // Update pagination
+        function updatePagination() {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+
+            if (totalPages <= 1) return;
+
+            // Previous button
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "Önceki";
+            prevBtn.className = "pagination-btn px-4 py-2 bg-pigeon-card text-text-primary rounded-lg border border-border-medium transition-all hover:bg-pigeon-card-hover";
+            prevBtn.disabled = currentPage === 1;
+            if (prevBtn.disabled) {
+                prevBtn.className += " opacity-50 cursor-not-allowed";
+            }
+            prevBtn.onclick = () => {
+                currentPage--;
+                search();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            pagination.appendChild(prevBtn);
+
+            // Page info
+            const info = document.createElement("span");
+            info.textContent = `Sayfa ${currentPage} / ${totalPages}`;
+            info.className = "text-text-tertiary px-4 font-medium";
+            pagination.appendChild(info);
+
+            // Next button
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "Sonraki";
+            nextBtn.className = "pagination-btn px-4 py-2 bg-pigeon-card text-text-primary rounded-lg border border-border-medium transition-all hover:bg-pigeon-card-hover";
+            nextBtn.disabled = currentPage >= totalPages;
+            if (nextBtn.disabled) {
+                nextBtn.className += " opacity-50 cursor-not-allowed";
+            }
+            nextBtn.onclick = () => {
+                currentPage++;
+                search();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            pagination.appendChild(nextBtn);
+        }
+
+        // Handle new search from results page
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newQuery = document.getElementById('searchQuery').value.trim();
+            if (newQuery) {
+                currentQuery = newQuery;
+                currentPage = 1;
+                filter = "";
+                
+                // Reset filter buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.add('text-text-tertiary');
+                });
+                document.querySelector('.filter-btn').classList.add('active');
+                document.querySelector('.filter-btn').classList.remove('text-text-tertiary');
+                
+                search();
+            }
+        });
+
+        // Add search input focus effect
+        const searchInput = document.getElementById('searchQuery');
+        searchInput.addEventListener('focus', function() {
+            this.parentElement.classList.add('ring-2', 'ring-brand-yellow');
+        });
+
+        searchInput.addEventListener('blur', function() {
+            this.parentElement.classList.remove('ring-2', 'ring-brand-yellow');
+        });
+    </script>
+</body>
+</html>

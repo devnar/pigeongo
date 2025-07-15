@@ -1,156 +1,259 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <title>PigeonGo</title>
-    <!-- Meta -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,  initial-scale=1, maximum-scale=1 user-scalable=0">
-    <meta name="description" content="Pigeongo, kullanıcıların gizliliğini en üst düzeyde korur ve hiçbir kişisel veriyi üçüncü şahıslarla paylaşmaz.">
-    <meta name="copyright" content="NAR © 2021 Tüm hakları saklı">
-    <meta name="theme-color" content="#23b5b5">
-    <meta property="og:title" content="PigeonGo">
-    <meta property="og:description" content="Pigeongo, kullanıcıların gizliliğini en üst düzeyde korur ve hiçbir kişisel veriyi üçüncü şahıslarla paylaşmaz.">
-    <meta property="og:image" content="https://devnar.github.io/logos/pigeongo.png">
-    <!-- /robots -->
-    <meta name="robots" content="index,follow">
-    <meta name="revisit-after" content="1 days">
-    <!-- Link -->
-    <link rel="shortcut icon" type="image/png" href="https://devnar.github.io/logos/pigeongo.png">
-    <link rel="stylesheet" id="themeLink" href="assets/main.css">
-    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PigeonGo - Gizliliğinizi Koruyarak Arama Yapın</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/tailwind.config.js"></script>
+    <link rel="icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/png">
+    <style>
+        body {
+            background-color: #1a1a1a;
+        }
+        .search-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 1px #fbbf24;
+        }
+        .logo-container {
+            transition: transform 0.3s ease;
+        }
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+        .search-button {
+            transition: all 0.3s ease;
+        }
+        .search-button:hover {
+            transform: scale(1.1);
+        }
+        .suggestion-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #374151;
+        }
+        .suggestion-item:hover {
+            background-color: #374151;
+        }
+        .suggestions-dropdown {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="top-section">
-            <div class="info-panel left-panel">
-                <img id="weather-icon" alt="weather-icon"></img>
-                <p id="weather-temp">25°C</p>
-            </div>
-            <div class="logo"></div>
-            <div class="info-panel right-panel" onclick="openNav()">
-                <i class='bx bx-menu'></i>
-            </div>
-        </div>
-        <div id="sidebar" class="sidebar">
-            <div class="sidebar-section">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <h2>Seçenekler</h2>
-                <form>
-                    <label for="country">İl:</label>
-                    <select id="country" name="country" onselect="alert(this.value)">
-                        <option value="adana">Adana</option>
-                        <option value="adiyaman">Adıyaman</option>
-                        <option value="afyonkarahisar">Afyonkarahisar</option>
-                        <option value="agri">Ağrı</option>
-                        <option value="aksaray">Aksaray</option>
-                        <option value="amasya">Amasya</option>
-                        <option value="ankara">Ankara</option>
-                        <option value="antalya">Antalya</option>
-                        <option value="ardahan">Ardahan</option>
-                        <option value="artvin">Artvin</option>
-                        <option value="aydin">Aydın</option>
-                        <option value="balikesir">Balıkesir</option>
-                        <option value="bartin">Bartın</option>
-                        <option value="batman">Batman</option>
-                        <option value="bayburt">Bayburt</option>
-                        <option value="bilecik">Bilecik</option>
-                        <option value="bingol">Bingöl</option>
-                        <option value="bitlis">Bitlis</option>
-                        <option value="bolu">Bolu</option>
-                        <option value="burdur">Burdur</option>
-                        <option value="bursa">Bursa</option>
-                        <option value="canakkale">Çanakkale</option>
-                        <option value="cankiri">Çankırı</option>
-                        <option value="corum">Çorum</option>
-                        <option value="denizli">Denizli</option>
-                        <option value="diyarbakir">Diyarbakır</option>
-                        <option value="duzce">Düzce</option>
-                        <option value="edirne">Edirne</option>
-                        <option value="elazig">Elazığ</option>
-                        <option value="erzincan">Erzincan</option>
-                        <option value="erzurum">Erzurum</option>
-                        <option value="eskisehir">Eskişehir</option>
-                        <option value="gaziantep">Gaziantep</option>
-                        <option value="giresun">Giresun</option>
-                        <option value="gumushane">Gümüşhane</option>
-                        <option value="hakkari">Hakkari</option>
-                        <option value="hatay">Hatay</option>
-                        <option value="igdir">Iğdır</option>
-                        <option value="isparta">Isparta</option>
-                        <option value="istanbul">İstanbul</option>
-                        <option value="izmir">İzmir</option>
-                        <option value="kahramanmaras">Kahramanmaraş</option>
-                        <option value="karabuk">Karabük</option>
-                        <option value="karaman">Karaman</option>
-                        <option value="kars">Kars</option>
-                        <option value="kastamonu">Kastamonu</option>
-                        <option value="kayseri">Kayseri</option>
-                        <option value="kirikkale">Kırıkkale</option>
-                        <option value="kirklareli">Kırklareli</option>
-                        <option value="kirsehir">Kırşehir</option>
-                        <option value="kilis">Kilis</option>
-                        <option value="kocaeli">Kocaeli</option>
-                        <option value="konya">Konya</option>
-                        <option value="kutahya">Kütahya</option>
-                        <option value="malatya">Malatya</option>
-                        <option value="manisa">Manisa</option>
-                        <option value="mardin">Mardin</option>
-                        <option value="mersin">Mersin</option>
-                        <option value="mugla">Muğla</option>
-                        <option value="mus">Muş</option>
-                        <option value="nevsehir">Nevşehir</option>
-                        <option value="nigde">Niğde</option>
-                        <option value="ordu">Ordu</option>
-                        <option value="osmaniye">Osmaniye</option>
-                        <option value="rize">Rize</option>
-                        <option value="sakarya">Sakarya</option>
-                        <option value="samsun">Samsun</option>
-                        <option value="sanliurfa">Şanlıurfa</option>
-                        <option value="siirt">Siirt</option>
-                        <option value="sinop">Sinop</option>
-                        <option value="sivas">Sivas</option>
-                        <option value="sirnak">Şırnak</option>
-                        <option value="tekirdag">Tekirdağ</option>
-                        <option value="tokat">Tokat</option>
-                        <option value="trabzon">Trabzon</option>
-                        <option value="tunceli">Tunceli</option>
-                        <option value="usak">Uşak</option>
-                        <option value="van">Van</option>
-                        <option value="yalova">Yalova</option>
-                        <option value="yozgat">Yozgat</option>
-                        <option value="zonguldak">Zonguldak</option>
-                    </select>
-                    <br>
-                    <label for="theme">Sonuçları</label>
-                    <select id="theme" name="theme">
-                        <option value="false">Yeni Sekmede Aç</option>
-                        <option value="true">Bu Sekmede Aç</option>
-                    </select>
-                </form>
-            </div>
-            <div class="sidebar-section">
-                <h2>PigeonGo</h2>
-                <p>Pigeongo'yu seçin ve internette özgürce gezmenin tadını çıkarın.</p>
-                <button onclick="window.location.href = 'https://github.com/devnar/pigeongo/blob/main/README.md'">Amacımızı Oku</button>
-            </div>
-        </div>
-        <form id="searchForm" class="search-bar">
-            <input id="query" type="text" placeholder="Arama yapın..." />
-            <button>
-                <i class="bx bx-search"></i>
+<body class="min-h-screen bg-pigeon-dark text-text-primary">
+    <!-- Header -->
+    <header class="flex items-center justify-between p-4">
+        <div class="flex items-center gap-4">
+            <button class="text-text-tertiary hover:text-text-primary transition-colors p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
             </button>
-        </form>
-        <div class="badges">
-            <input type="radio" id="web" name="engine" value="">
-            <label class="badge" for="web">Web</label><br>
-            <input type="radio" id="news" name="engine" value="&gsc.ref=more%3Anews">
-            <label class="badge" for="news">Haber</label>
-            <input type="radio" id="shop" name="engine" value="&gsc.ref=more%3Ashop">
-            <label class="badge" for="shop">Alışveriş</label>
-            <input type="radio" id="info" name="engine" value="&gsc.ref=more%3Ainfo">
-            <label class="badge" for="info">Bilgi</label>
         </div>
-    </div>
-    <script src="assets/script.js"></script>
+        <div class="flex items-center gap-4">
+            <button class="text-text-tertiary hover:text-text-primary transition-colors p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4">
+        <!-- Logo -->
+        <div class="mb-8 logo-container">
+            <img src="https://devnar.github.io/logos/pigeongo.png" alt="PigeonGo Logo" class="w-32 h-32 rounded-lg shadow-lg">
+        </div>
+
+        <!-- Brand Name -->
+        <h1 class="text-5xl font-light mb-8 text-center">
+            Pigeon<span class="text-brand-yellow">Go</span>
+        </h1>
+
+        <!-- Search Form -->
+        <form id="searchForm" class="w-full max-w-2xl mb-8 relative">
+            <div class="relative">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Web'de takip edilmeden arama yapın"
+                    class="search-input w-full h-14 pl-6 pr-14 text-lg bg-pigeon-card border-2 border-border-medium text-text-primary placeholder-text-placeholder rounded-full focus:outline-none transition-all duration-300"
+                    autocomplete="off"
+                >
+                <button
+                    type="submit"
+                    class="search-button absolute right-2 top-2 h-10 w-10 bg-brand-yellow hover:bg-brand-yellow-hover text-black rounded-full flex items-center justify-center"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Search Suggestions Dropdown -->
+            <div id="suggestionsDropdown" class="suggestions-dropdown absolute top-full left-0 right-0 bg-pigeon-card border border-border-medium rounded-lg mt-1 hidden z-10">
+                <!-- Suggestions will be populated here -->
+            </div>
+            
+            <datalist id="searchSuggestions">
+                <!-- History suggestions will be populated here -->
+            </datalist>
+        </form>
+
+        <!-- Search Buttons -->
+        <div class="flex gap-4 mb-8 flex-wrap justify-center">
+            <button
+                id="searchBtn"
+                class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-6 py-3 rounded-lg transition-colors duration-300"
+            >
+                PigeonGo Arama
+            </button>
+            <button
+                id="luckyBtn"
+                class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-6 py-3 rounded-lg transition-colors duration-300"
+            >
+                Kendimi Şanslı Hissediyorum
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="absolute bottom-0 w-full p-6">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-text-tertiary">
+            <div class="flex gap-6 flex-wrap justify-center">
+                <a href="#" class="hover:text-text-primary transition-colors">Hakkında</a>
+                <a href="#" class="hover:text-text-primary transition-colors">Gizlilik</a>
+                <a href="#" class="hover:text-text-primary transition-colors">Şartlar</a>
+            </div>
+            <div class="flex gap-6 flex-wrap justify-center">
+                <a href="#" class="hover:text-text-primary transition-colors">Yardım</a>
+                <a href="#" class="hover:text-text-primary transition-colors">Bağış</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search history management
+        let history = JSON.parse(localStorage.getItem('PigeonGo_history') || '[]');
+
+        // Search functionality
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const luckyBtn = document.getElementById('luckyBtn');
+        const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+
+        // Load search history on page load
+        updateSuggestions();
+
+        // Handle form submission
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            performSearch();
+        });
+
+        // Handle search button click
+        searchBtn.addEventListener('click', function() {
+            performSearch();
+        });
+
+        // Handle lucky button click
+        luckyBtn.addEventListener('click', function() {
+            const query = searchInput.value.trim();
+            if (query) {
+                addToHistory(query);
+                window.location.href = `results.html?q=${encodeURIComponent(query)}&lucky=true`;
+            }
+        });
+
+        // Perform search function
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                addToHistory(query);
+                window.location.href = `results.html?q=${encodeURIComponent(query)}`;
+            } else {
+                alert("Lütfen arama terimi girin.");
+            }
+        }
+
+        // Add to search history
+        function addToHistory(query) {
+            if (!history.includes(query)) {
+                history.unshift(query);
+                if (history.length > 10) {
+                    history = history.slice(0, 10);
+                }
+                localStorage.setItem('PigeonGo_history', JSON.stringify(history));
+                updateSuggestions();
+            }
+        }
+
+        // Update search suggestions
+        function updateSuggestions() {
+            const datalist = document.getElementById("searchSuggestions");
+            datalist.innerHTML = history
+                .map((q) => `<option value="${q}"></option>`)
+                .join("");
+        }
+
+        // Show suggestions dropdown
+        function showSuggestions() {
+            if (history.length > 0) {
+                suggestionsDropdown.innerHTML = history
+                    .map(query => `<div class="suggestion-item text-text-primary" onclick="selectSuggestion('${query}')">${query}</div>`)
+                    .join('');
+                suggestionsDropdown.classList.remove('hidden');
+            }
+        }
+
+        // Hide suggestions dropdown
+        function hideSuggestions() {
+            setTimeout(() => {
+                suggestionsDropdown.classList.add('hidden');
+            }, 200);
+        }
+
+        // Select suggestion
+        function selectSuggestion(query) {
+            searchInput.value = query;
+            suggestionsDropdown.classList.add('hidden');
+            performSearch();
+        }
+
+
+        searchInput.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                const filteredHistory = history.filter(item => 
+                    item.toLowerCase().includes(this.value.toLowerCase())
+                );
+                if (filteredHistory.length > 0) {
+                    suggestionsDropdown.innerHTML = filteredHistory
+                        .map(query => `<div class="suggestion-item text-text-primary" onclick="selectSuggestion('${query}')">${query}</div>`)
+                        .join('');
+                    suggestionsDropdown.classList.remove('hidden');
+                } else {
+                    suggestionsDropdown.classList.add('hidden');
+                }
+            } else {
+                showSuggestions();
+            }
+        });
+
+        // Focus on search input when page loads
+        window.addEventListener('load', function() {
+            searchInput.focus();
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchForm.contains(e.target)) {
+                suggestionsDropdown.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
