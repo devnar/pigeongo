@@ -3,59 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PigeonGo - Gizliliğinizi Koruyarak Arama Yapın</title>
+    <title>PigeonGo - Arama Yapın</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="assets/tailwind.config.js"></script>
     <link rel="icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/png">
-    <style>
-        body {
-            background-color: #1a1a1a;
-        }
-        .search-input:focus {
-            border-color: #fbbf24;
-            box-shadow: 0 0 0 1px #fbbf24;
-        }
-        .logo-container {
-            transition: transform 0.3s ease;
-        }
-        .logo-container:hover {
-            transform: scale(1.05);
-        }
-        .search-button {
-            transition: all 0.3s ease;
-        }
-        .search-button:hover {
-            transform: scale(1.1);
-        }
-        .suggestion-item {
-            padding: 8px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid #374151;
-        }
-        .suggestion-item:hover {
-            background-color: #374151;
-        }
-        .suggestions-dropdown {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body class="min-h-screen bg-pigeon-dark text-text-primary">
     <!-- Header -->
     <header class="flex items-center justify-between p-4">
         <div class="flex items-center gap-4">
-            <button class="text-text-tertiary hover:text-text-primary transition-colors p-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+            <div id="favoritesBar" class="flex items-center gap-3"></div>
+            <button onclick="newFavoriAdd()" class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-4 py-2 rounded-lg transition-colors duration-300">
+                +
             </button>
         </div>
         <div class="flex items-center gap-4">
             <button class="text-text-tertiary hover:text-text-primary transition-colors p-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6.75C3 6.05302 3 5.70453 3.05764 5.41473C3.29436 4.22466 4.22466 3.29436 5.41473 3.05764C5.70453 3 6.05302 3 6.75 3C7.44698 3 7.79547 3 8.08527 3.05764C9.27534 3.29436 10.2056 4.22466 10.4424 5.41473C10.5 5.70453 10.5 6.05302 10.5 6.75C10.5 7.44698 10.5 7.79547 10.4424 8.08527C10.2056 9.27534 9.27534 10.2056 8.08527 10.4424C7.79547 10.5 7.44698 10.5 6.75 10.5C6.05302 10.5 5.70453 10.5 5.41473 10.4424C4.22466 10.2056 3.29436 9.27534 3.05764 8.08527C3 7.79547 3 7.44698 3 6.75Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M3 17.25C3 16.553 3 16.2045 3.05764 15.9147C3.29436 14.7247 4.22466 13.7944 5.41473 13.5576C5.70453 13.5 6.05302 13.5 6.75 13.5C7.44698 13.5 7.79547 13.5 8.08527 13.5576C9.27534 13.7944 10.2056 14.7247 10.4424 15.9147C10.5 16.2045 10.5 16.553 10.5 17.25C10.5 17.947 10.5 18.2955 10.4424 18.5853C10.2056 19.7753 9.27534 20.7056 8.08527 20.9424C7.79547 21 7.44698 21 6.75 21C6.05302 21 5.70453 21 5.41473 20.9424C4.22466 20.7056 3.29436 19.7753 3.05764 18.5853C3 18.2955 3 17.947 3 17.25Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M13.5 6.75C13.5 6.05302 13.5 5.70453 13.5576 5.41473C13.7944 4.22466 14.7247 3.29436 15.9147 3.05764C16.2045 3 16.553 3 17.25 3C17.947 3 18.2955 3 18.5853 3.05764C19.7753 3.29436 20.7056 4.22466 20.9424 5.41473C21 5.70453 21 6.05302 21 6.75C21 7.44698 21 7.79547 20.9424 8.08527C20.7056 9.27534 19.7753 10.2056 18.5853 10.4424C18.2955 10.5 17.947 10.5 17.25 10.5C16.553 10.5 16.2045 10.5 15.9147 10.4424C14.7247 10.2056 13.7944 9.27534 13.5576 8.08527C13.5 7.79547 13.5 7.44698 13.5 6.75Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M13.5 17.25C13.5 16.553 13.5 16.2045 13.5576 15.9147C13.7944 14.7247 14.7247 13.7944 15.9147 13.5576C16.2045 13.5 16.553 13.5 17.25 13.5C17.947 13.5 18.2955 13.5 18.5853 13.5576C19.7753 13.7944 20.7056 14.7247 20.9424 15.9147C21 16.2045 21 16.553 21 17.25C21 17.947 21 18.2955 20.9424 18.5853C20.7056 19.7753 19.7753 20.7056 18.5853 20.9424C18.2955 21 17.947 21 17.25 21C16.553 21 16.2045 21 15.9147 20.9424C14.7247 20.7056 13.7944 19.7753 13.5576 18.5853C13.5 18.2955 13.5 17.947 13.5 17.25Z" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
             </button>
         </div>
@@ -79,7 +48,7 @@
                 <input
                     type="text"
                     id="searchInput"
-                    placeholder="Web'de takip edilmeden arama yapın"
+                    placeholder="Web'de arama yapın"
                     class="search-input w-full h-14 pl-6 pr-14 text-lg bg-pigeon-card border-2 border-border-medium text-text-primary placeholder-text-placeholder rounded-full focus:outline-none transition-all duration-300"
                     autocomplete="off"
                 >
@@ -105,12 +74,6 @@
 
         <!-- Search Buttons -->
         <div class="flex gap-4 mb-8 flex-wrap justify-center">
-            <button
-                id="searchBtn"
-                class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-6 py-3 rounded-lg transition-colors duration-300"
-            >
-                PigeonGo Arama
-            </button>
             <button
                 id="luckyBtn"
                 class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-6 py-3 rounded-lg transition-colors duration-300"
@@ -254,6 +217,68 @@
                 suggestionsDropdown.classList.add('hidden');
             }
         });
+
+        // Harfi alma fonksiyonu
+        function getSpecialLetter(link) {
+            try {
+                const url = new URL(link);
+                const pathname = url.pathname;
+                const hostname = url.hostname;
+
+                const pathParts = pathname.split("/").filter(Boolean);
+
+                if (pathParts.length > 0) {
+                    return pathParts[0][0];
+                } else {
+                    return hostname[0];
+                }
+            } catch (e) {
+                return '';
+            }
+        }
+
+        // Favorileri yükle
+        function loadFavorites() {
+            const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+            const container = document.getElementById("favoritesBar");
+            container.innerHTML = "";
+            favorites.forEach((link, index) => {
+                const label = getSpecialLetter(link);
+                const button = document.createElement("div");
+                button.className = "flex items-center gap-1";
+
+                button.innerHTML = `
+                    <a href="${link}" target="_blank">
+                        <button class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-4 py-2 rounded-lg transition-colors duration-300">
+                            ${label}
+                        </button>
+                    </a>
+                `;
+                container.appendChild(button);
+            });
+        }
+
+        // Favori ekle
+        function newFavoriAdd() {
+            const link = prompt("Add link for shortcut");
+            if (link && link.trim() !== '') {
+                const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+                favorites.push(link);
+                localStorage.setItem("favorites", JSON.stringify(favorites));
+                loadFavorites();
+            } else {
+                alert('You have not entered a valid link.');
+            }
+        }
+
+        // Favori sil
+        function removeFavorite(index) {
+            const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+            favorites.splice(index, 1);
+            localStorage.setItem("favorites", JSON.stringify(favorites));
+            loadFavorites();
+        }
     </script>
 </body>
+<script>window.addEventListener("DOMContentLoaded", loadFavorites);</script>
 </html>
