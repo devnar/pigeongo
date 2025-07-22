@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">pigeonGO - Arama Sonuçları</title>
+    <title id="pageTitle">PigeonGo - Arama Sonuçları</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="assets/tailwind.config.js"></script>
     <link rel="icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/png">
@@ -11,13 +11,10 @@
 </head>
 <body class="min-h-screen bg-pigeon-dark text-text-primary">
     <!-- Header with Search -->
-    <header class="border-b border-border-light p-4 sticky top-0 bg-pigeon-dark z-10 pigeon-glass">
-        <div class="max-w-6xl mx-auto flex items-center gap-6">
+    <header class="p-4 sticky top-0 bg-pigeon-dark z-10">
+        <div class="max-w-6xl  flex items-center gap-6">
             <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
                 <img src="https://devnar.github.io/logos/pigeongo.png" alt="pigeonGO Logo" class="w-10 h-10 rounded">
-                <span class="text-xl font-light hidden md:block">
-                    Pigeon<span class="text-brand-yellow">Go</span>
-                </span>
             </a>
 
             <form id="searchForm" class="flex-1 max-w-2xl">
@@ -42,7 +39,7 @@
     </header>
 
     <!-- Search Filters -->
-    <div class="max-w-6xl mx-auto px-4 pt-3 border-b border-border-light">
+    <div class="max-w-2xl sm:ml-20 px-4 pt-3 border-b border-border-light">
         <div class="flex gap-6 text-sm">
             <button class="filter-btn active pb-2 transition-colors" onclick="setFilter('')">Tümü</button>
             <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('image')">Görseller</button>
@@ -58,31 +55,14 @@
     </div>
 
     <!-- Search Results -->
-    <main class="max-w-6xl mx-auto p-4">
-        <div id="results" class="space-y-6">
+    <main class="max-w-2xl sm:ml-20 p-4 h-screen">
+        <div id="results" class="space-y-6 max-w-2xl ">
             <!-- Results will be populated by JavaScript -->
         </div>
 
         <!-- Pagination -->
-        <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8">
-            <!-- Pagination will be populated by JavaScript -->
-        </div>
+        <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8"></div>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-border-light mt-12 p-6">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-text-tertiary">
-            <div class="flex gap-6 flex-wrap justify-center">
-                <a href="#" class="hover:text-text-primary transition-colors">Hakkında</a>
-                <a href="#" class="hover:text-text-primary transition-colors">Gizlilik</a>
-                <a href="#" class="hover:text-text-primary transition-colors">Şartlar</a>
-            </div>
-            <div class="flex gap-6 flex-wrap justify-center">
-                <a href="#" class="hover:text-text-primary transition-colors">Yardım</a>
-                <a href="#" class="hover:text-text-primary transition-colors">Bağış</a>
-            </div>
-        </div>
-    </footer>
 
     <script>
         const apiKey = atob("QUl6YVN5RDRjNlpsdkN5TkNFNk1hTTRjOWlIeE05VHJIcWhkbWk4");
@@ -318,16 +298,6 @@
                 
                 search();
             }
-        });
-
-        // Add search input focus effect
-        const searchInput = document.getElementById('searchQuery');
-        searchInput.addEventListener('focus', function() {
-            this.parentElement.classList.add('ring-2', 'ring-brand-yellow');
-        });
-
-        searchInput.addEventListener('blur', function() {
-            this.parentElement.classList.remove('ring-2', 'ring-brand-yellow');
         });
     </script>
     <script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
