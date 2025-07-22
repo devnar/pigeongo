@@ -13,9 +13,10 @@
     <!-- Header -->
     <header class="flex items-center justify-between p-4">
         <div class="flex items-center gap-4">
-            <div id="favoritesBar" class="flex items-center gap-3"></div>
-            <button onclick="newFavoriAdd()" class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-4 py-2 rounded-lg transition-colors duration-300">
-                +
+            <button class="text-text-tertiary hover:text-text-primary transition-colors p-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 12C16 10.9391 15.5786 9.92172 14.8284 9.17158C14.0783 8.42143 13.0609 8 12 8C10.9391 8 9.92172 8.42143 9.17158 9.17158C8.42143 9.92172 8 10.9391 8 12C8 13.0609 8.42143 14.0783 9.17158 14.8284C9.92172 15.5786 10.9391 16 12 16C13.0609 16 14.0783 15.5786 14.8284 14.8284C15.5786 14.0783 16 13.0609 16 12ZM16 12V13.5C16 14.163 16.2634 14.7989 16.7322 15.2678C17.2011 15.7366 17.837 16 18.5 16C19.163 16 19.7989 15.7366 20.2678 15.2678C20.7366 14.7989 21 14.163 21 13.5V12C21 10.22 20.4722 8.47991 19.4832 6.99987C18.4943 5.51983 17.0887 4.36628 15.4442 3.68509C13.7996 3.0039 11.99 2.82567 10.2442 3.17294C8.49836 3.5202 6.89472 4.37737 5.63604 5.63604C4.37737 6.89472 3.5202 8.49836 3.17294 10.2442C2.82567 11.99 3.0039 13.7996 3.68509 15.4442C4.36628 17.0887 5.51983 18.4943 6.99987 19.4832C8.47991 20.4722 10.22 21 12 21C13.5802 21.0016 15.1327 20.5862 16.5 19.794" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
             </button>
         </div>
         <div class="flex items-center gap-4">
@@ -33,14 +34,17 @@
     <!-- Main Content -->
     <main class="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4">
         <!-- Logo -->
-        <div class="mb-8 logo-container">
-            <img src="https://devnar.github.io/logos/pigeongo.png" alt="PigeonGo Logo" class="w-32 h-32 rounded-lg shadow-lg">
-        </div>
+         <div class="flex flex-row items-center justify-center gap-4">
+            <div class="mb-8 logo-container">
+                <img src="https://devnar.github.io/logos/pigeongo.png" alt="PigeonGo Logo" class="w-28 h-28 rounded-lg shadow-lg">
+            </div>
 
-        <!-- Brand Name -->
-        <h1 class="text-5xl font-light mb-8 text-center">
-            Pigeon<span class="text-brand-yellow">Go</span>
-        </h1>
+            <!-- Brand Name -->
+            <h1 class="text-6xl font-light mb-8 text-center">
+                Pigeon<span class="text-brand-yellow">Go</span>
+            </h1>
+         </div>
+        
 
         <!-- Search Form -->
         <form id="searchForm" class="w-full max-w-2xl mb-8 relative">
@@ -71,16 +75,6 @@
                 <!-- History suggestions will be populated here -->
             </datalist>
         </form>
-
-        <!-- Search Buttons -->
-        <div class="flex gap-4 mb-8 flex-wrap justify-center">
-            <button
-                id="luckyBtn"
-                class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-6 py-3 rounded-lg transition-colors duration-300"
-            >
-                Kendimi Şanslı Hissediyorum
-            </button>
-        </div>
     </main>
 
     <!-- Footer -->
@@ -121,15 +115,6 @@
         // Handle search button click
         searchBtn.addEventListener('click', function() {
             performSearch();
-        });
-
-        // Handle lucky button click
-        luckyBtn.addEventListener('click', function() {
-            const query = searchInput.value.trim();
-            if (query) {
-                addToHistory(query);
-                window.location.href = `results.html?q=${encodeURIComponent(query)}&lucky=true`;
-            }
         });
 
         // Perform search function
@@ -235,48 +220,6 @@
             } catch (e) {
                 return '';
             }
-        }
-
-        // Favorileri yükle
-        function loadFavorites() {
-            const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-            const container = document.getElementById("favoritesBar");
-            container.innerHTML = "";
-            favorites.forEach((link, index) => {
-                const label = getSpecialLetter(link);
-                const button = document.createElement("div");
-                button.className = "flex items-center gap-1";
-
-                button.innerHTML = `
-                    <a href="${link}" target="_blank">
-                        <button class="bg-pigeon-card hover:bg-pigeon-card-hover text-text-primary border border-border-medium px-4 py-2 rounded-lg transition-colors duration-300">
-                            ${label}
-                        </button>
-                    </a>
-                `;
-                container.appendChild(button);
-            });
-        }
-
-        // Favori ekle
-        function newFavoriAdd() {
-            const link = prompt("Add link for shortcut");
-            if (link && link.trim() !== '') {
-                const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-                favorites.push(link);
-                localStorage.setItem("favorites", JSON.stringify(favorites));
-                loadFavorites();
-            } else {
-                alert('You have not entered a valid link.');
-            }
-        }
-
-        // Favori sil
-        function removeFavorite(index) {
-            const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-            favorites.splice(index, 1);
-            localStorage.setItem("favorites", JSON.stringify(favorites));
-            loadFavorites();
         }
     </script>
     <script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
