@@ -1,0 +1,16 @@
+<div class="bg-pigeon-card p-4 rounded-2xl shadow-md border border-border-light space-y-3">
+  <h2 class="text-text-primary text-lg font-semibold">Find & Replace</h2>
+  <textarea id="frText" rows="4" class="w-full bg-pigeon-dark text-text-primary p-2 rounded border border-border-medium placeholder-text-placeholder focus:border-border-focus focus:outline-none" placeholder="Metni buraya yapıştır..."></textarea>
+  <input type="text" id="findStr" class="w-full bg-pigeon-dark text-text-primary p-2 rounded border border-border-medium placeholder-text-placeholder focus:border-border-focus focus:outline-none" placeholder="Bul">
+  <input type="text" id="replaceStr" class="w-full bg-pigeon-dark text-text-primary p-2 rounded border border-border-medium placeholder-text-placeholder focus:border-border-focus focus:outline-none" placeholder="Değiştir">
+  <button onclick="findAndReplace()" class="w-full bg-accent-orange hover:bg-accent-green-hover text-pigeon-dark font-semibold py-2 rounded transition-all">Değiştir</button>
+</div>
+
+<script>
+  function findAndReplace() {
+    const text = document.getElementById("frText").value;
+    const find = document.getElementById("findStr").value;
+    const replace = document.getElementById("replaceStr").value;
+    document.getElementById("frText").value = text.split(find).join(replace);
+  }
+</script>

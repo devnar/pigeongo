@@ -1,0 +1,18 @@
+<div class="bg-pigeon-card p-4 rounded-2xl shadow-md border border-border-light space-y-3">
+  <h2 class="text-text-primary text-lg font-semibold">Hesap Makinesi</h2>
+  <input type="text" id="calcInput" class="w-full bg-pigeon-dark text-text-primary p-2 rounded border border-border-medium placeholder-text-placeholder focus:border-border-focus focus:outline-none" placeholder="İfade girin (örn. 12+3*4)">
+  <button onclick="calculate()" class="w-full bg-brand-yellow hover:bg-brand-yellow-hover text-pigeon-dark font-semibold py-2 rounded transition-all">Hesapla</button>
+  <div id="calcResult" class="text-accent-green font-medium"></div>
+</div>
+
+<script>
+  function calculate() {
+    const input = document.getElementById("calcInput").value;
+    try {
+      const result = Function(`"use strict"; return (${input})`)();
+      document.getElementById("calcResult").textContent = `Sonuç: ${result}`;
+    } catch {
+      document.getElementById("calcResult").textContent = "Hatalı ifade.";
+    }
+  }
+</script>

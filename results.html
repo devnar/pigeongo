@@ -55,14 +55,18 @@
     </div>
 
     <!-- Search Results -->
-    <main class="max-w-2xl sm:ml-20 p-4 h-screen">
-        <div id="results" class="space-y-6 max-w-2xl ">
-            <!-- Results will be populated by JavaScript -->
+    <main class="flex flex-col lg:flex-row p-4 lg:gap-8 sm:ml-20 max-w-full">
+        <div class="order-2 lg:order-1 flex-1 space-y-6 max-w-2xl">
+            <div id="results"><!-- Sonuçlar --></div>
+            <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8"></div>
         </div>
 
-        <!-- Pagination -->
-        <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8"></div>
+        <div id="tools" class="order-1 lg:order-2 w-full lg:w-64 mb-6 lg:mb-0 max-w-2xl">
+            <!-- Araçlar buraya gelecek -->
+        </div>
     </main>
+
+
 
     <script>
         const apiKey = atob("QUl6YVN5RDRjNlpsdkN5TkNFNk1hTTRjOWlIeE05VHJIcWhkbWk4");
@@ -80,6 +84,77 @@
         const urlParams = new URLSearchParams(window.location.search);
         const searchQuery = urlParams.get('q') || '';
         const isLucky = urlParams.get('lucky') === 'true';
+        const toolKeywords = {
+            "hesap makinesi": "tools/calc.html",
+            "calculator": "tools/calc.html",
+            "qr": "tools/qr.html",
+            "qr kod": "tools/qr.html",
+            "qr code": "tools/qr.html",
+            "find and replace": "tools/find.html",
+            "bul ve değiştir": "tools/find.html",
+            "replace": "tools/find.html"
+        };
+
+        function loadToolForQuery(query) {
+            const toolsDiv = document.getElementById("tools");
+            toolsDiv.innerHTML = "";
+
+            const match = Object.keys(toolKeywords).find(keyword =>
+                query.toLowerCase().includes(keyword)
+            );
+
+            if (match) {
+                const url = toolKeywords[match];
+                fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    toolsDiv.innerHTML = html;
+
+                    // Scriptleri çalıştır
+                    const tempDiv = document.createElement("div");
+                    tempDiv.innerHTML = html;
+                    const scripts = tempDiv.querySelectorAll("script");
+
+                    scripts.forEach(oldScript => {
+                    const newScript = document.createElement("script");
+                    if (oldScript.src) newScript.src = oldScript.src;
+                    else newScript.textContent = oldScript.textContent;
+                    document.body.appendChild(newScript);
+                    });
+                })
+                .catch(() => {
+                    // Eğer araç da bulunamadıysa Wikipedia göster
+                    loadWikipediaSummary(query);
+                });
+            } else {
+                // Araç yoksa Wikipedia göster
+                loadWikipediaSummary(query);
+            }
+        }
+
+
+        function loadWikipediaSummary(query) {
+            const toolsDiv = document.getElementById("tools");
+            const apiUrl = `https://tr.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+
+            fetch(apiUrl)
+                .then(res => {
+                if (!res.ok) throw new Error("Yok");
+                return res.json();
+                })
+                .then(data => {
+                toolsDiv.innerHTML = `
+                    <div class="bg-pigeon-card p-4 rounded-xl border border-border-light shadow-md space-y-4">
+                    <h2 class="text-lg font-semibold text-brand-yellow">${data.title}</h2>
+                    ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}" class="w-full rounded" />` : ""}
+                    <p class="text-text-secondary leading-relaxed">${data.extract}</p>
+                    ${data.content_urls?.desktop?.page ? `
+                        <a href="${data.content_urls.desktop.page}" target="_blank" class="text-accent-blue hover:underline">Wikipedi'de oku</a>` : ""}
+                    </div>
+                `;
+                })
+                .catch(() => {});
+        }
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
@@ -92,6 +167,26 @@
                 window.location.href = 'index.html';
             }
         });
+
+        function showToolIframe(query) {
+            const toolsDiv = document.getElementById("tools");
+            toolsDiv.innerHTML = "";
+
+            const match = Object.keys(embeddedTools).find(toolKeyword => 
+                query.toLowerCase().includes(toolKeyword)
+            );
+
+            if (match) {
+                const iframe = document.createElement("iframe");
+                iframe.src = embeddedTools[match];
+                iframe.className = "w-full h-[500px] rounded border border-border-light";
+                iframe.loading = "lazy";
+                iframe.referrerPolicy = "no-referrer";
+                toolsDiv.appendChild(iframe);
+            } else {
+                toolsDiv.innerHTML = ""; 
+            }
+        }
 
         // Set search filter
         function setFilter(type) {
@@ -119,6 +214,8 @@
                 alert("Lütfen arama terimi girin.");
                 return;
             }
+
+            loadToolForQuery(query);
 
             // Add to history
             if (!history.includes(query)) {
@@ -185,6 +282,7 @@
 
             // Display results
             data.items.forEach((item) => {
+                console.log(item);
                 const title = item.title;
                 const link = item.link;
                 const snippet = item.snippet;
@@ -205,14 +303,11 @@
                     resultItem.className = "result-item p-4 bg-pigeon-card rounded-lg shadow-lg hover:shadow-xl border border-border-light";
                     resultItem.innerHTML = `
                         <div class="flex items-start gap-2 mb-1">
-                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-accent-green hover:text-accent-green-hover text-sm result-link break-all">
+                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-text-muted-hover text-sm result-link break-all">
                                 ${link}
                             </a>
-                            <svg class="w-3 h-3 text-text-muted mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                            </svg>
                         </div>
-                        <h3 class="text-xl text-accent-blue hover:text-accent-blue-hover mb-2">
+                        <h3 class="text-xl text-brand-yellow hover:text-brand-yellow-hover mb-2">
                             <a href="${link}" class="result-link" target="_blank" rel="noopener noreferrer">
                                 ${title}
                             </a>
