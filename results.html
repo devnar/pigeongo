@@ -85,15 +85,70 @@
         const searchQuery = urlParams.get('q') || '';
         const isLucky = urlParams.get('lucky') === 'true';
         const toolKeywords = {
+            // Hesap Makinesi
             "hesap makinesi": "tools/calc.html",
             "calculator": "tools/calc.html",
+            "dört işlem": "tools/calc.html",
+            "matematik": "tools/calc.html",
+            "toplama": "tools/calc.html",
+            "çıkarma": "tools/calc.html",
+            "çarpma": "tools/calc.html",
+            "bölme": "tools/calc.html",
+            "hesapla": "tools/calc.html",
+
+            // QR Code
             "qr": "tools/qr.html",
             "qr kod": "tools/qr.html",
             "qr code": "tools/qr.html",
+            "barkod": "tools/qr.html",
+            "kod oluştur": "tools/qr.html",
+            "qr oluştur": "tools/qr.html",
+
+            // Find & Replace
             "find and replace": "tools/find.html",
             "bul ve değiştir": "tools/find.html",
-            "replace": "tools/find.html"
+            "replace": "tools/find.html",
+            "bul": "tools/find.html",
+            "değiştir": "tools/find.html",
+
+            // Birim Dönüştürücü
+            "birim dönüştürücü": "tools/unit.html",
+            "birim çevirici": "tools/unit.html",
+            "kg": "tools/unit.html",
+            "libre": "tools/unit.html",
+            "km": "tools/unit.html",
+            "mil": "tools/unit.html",
+            "santimetre": "tools/unit.html",
+            "inch": "tools/unit.html",
+            "sıcaklık": "tools/unit.html",
+            "celsius": "tools/unit.html",
+            "fahrenheit": "tools/unit.html",
+            "çevir": "tools/unit.html",
+            "dönüştür": "tools/unit.html",
+
+            // Kronometre ve Zamanlayıcı
+            "kronometre": "tools/stopwatch.html",
+            "zamanlayıcı": "tools/stopwatch.html",
+            "timer": "tools/stopwatch.html",
+            "stopwatch": "tools/stopwatch.html",
+            "geri sayım": "tools/stopwatch.html",
+            "sayacı": "tools/stopwatch.html",
+            "kronometre başlat": "tools/stopwatch.html",
+            "zaman sayacı": "tools/stopwatch.html",
+
+            // Hava Durumu
+            "hava durumu": "tools/weather.html",
+            "hava": "tools/weather.html",
+            "sıcaklık": "tools/weather.html",
+            "bulut": "tools/weather.html",
+            "yağmur": "tools/weather.html",
+            "kar": "tools/weather.html",
+            "rüzgar": "tools/weather.html",
+            "şehir": "tools/weather.html",
+            "şehir hava durumu": "tools/weather.html",
+            "weather": "tools/weather.html",
         };
+
 
         function loadToolForQuery(query) {
             const toolsDiv = document.getElementById("tools");

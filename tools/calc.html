@@ -1,18 +1,55 @@
-<div class="bg-pigeon-card p-4 rounded-2xl shadow-md border border-border-light space-y-3">
-  <h2 class="text-text-primary text-lg font-semibold">Hesap Makinesi</h2>
-  <input type="text" id="calcInput" class="w-full bg-pigeon-dark text-text-primary p-2 rounded border border-border-medium placeholder-text-placeholder focus:border-border-focus focus:outline-none" placeholder="İfade girin (örn. 12+3*4)">
-  <button onclick="calculate()" class="w-full bg-brand-yellow hover:bg-brand-yellow-hover text-pigeon-dark font-semibold py-2 rounded transition-all">Hesapla</button>
-  <div id="calcResult" class="text-accent-green font-medium"></div>
+<!-- tools/calc.html -->
+<div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary max-w-md mx-auto">
+  <input id="calcInput" type="text" class="w-full p-3 mb-4 bg-pigeon-dark rounded border border-border-light text-xl text-right placeholder-text-muted" placeholder="0" readonly />
+  <div class="grid grid-cols-4 gap-3">
+    <button class="btn">7</button>
+    <button class="btn">8</button>
+    <button class="btn">9</button>
+    <button class="btn text-brand-yellow hover:text-brand-yellow-hover">/</button>
+    
+    <button class="btn">4</button>
+    <button class="btn">5</button>
+    <button class="btn">6</button>
+    <button class="btn text-brand-yellow hover:text-brand-yellow-hover">*</button>
+    
+    <button class="btn">1</button>
+    <button class="btn">2</button>
+    <button class="btn">3</button>
+    <button class="btn text-brand-yellow hover:text-brand-yellow-hover">-</button>
+    
+    <button class="btn">0</button>
+    <button class="btn">.</button>
+    <button id="clearBtn" class="btn text-accent-red hover:text-accent-red">C</button>
+    <button class="btn text-brand-yellow hover:text-brand-yellow-hover">+</button>
+    
+    <button id="equalsBtn" class="col-span-4 btn bg-brand-yellow text-pigeon-darker font-bold hover:bg-brand-yellow-hover">=</button>
+  </div>
 </div>
 
 <script>
-  function calculate() {
-    const input = document.getElementById("calcInput").value;
-    try {
-      const result = Function(`"use strict"; return (${input})`)();
-      document.getElementById("calcResult").textContent = `Sonuç: ${result}`;
-    } catch {
-      document.getElementById("calcResult").textContent = "Hatalı ifade.";
-    }
-  }
+  const input = document.getElementById('calcInput');
+  const buttons = document.querySelectorAll('.btn');
+  let expression = '';
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const val = button.textContent;
+
+      if (val === 'C') {
+        expression = '';
+        input.value = '0';
+      } else if (val === '=') {
+        try {
+          expression = eval(expression).toString();
+          input.value = expression;
+        } catch {
+          input.value = 'Hata';
+          expression = '';
+        }
+      } else {
+        expression += val;
+        input.value = expression;
+      }
+    });
+  });
 </script>

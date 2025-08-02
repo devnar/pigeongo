@@ -1,0 +1,78 @@
+<div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary max-w-md mx-auto">
+  <h2 class="text-xl font-semibold mb-4">Kronometre ve Zamanlayıcı</h2>
+  <div class="text-4xl font-mono text-center mb-4" id="display">00:00:00</div>
+  
+  <div class="flex justify-center gap-4 mb-4">
+    <button id="startBtn" class="btn bg-accent-green hover:bg-accent-green-light">Başlat</button>
+    <button id="pauseBtn" class="btn bg-accent-blue hover:bg-accent-blue-light">Duraklat</button>
+    <button id="resetBtn" class="btn bg-accent-red hover:bg-accent-red-light">Sıfırla</button>
+  </div>
+
+  <div class="mb-4">
+    <input id="timerInput" type="number" placeholder="Zamanlayıcı (saniye)" min="1" class="w-full p-3 bg-pigeon-dark rounded border border-border-light text-text-primary" />
+    <button id="startTimerBtn" class="w-full bg-brand-yellow hover:bg-brand-yellow-hover text-pigeon-darker font-bold p-3 rounded mt-2">Zamanlayıcıyı Başlat</button>
+  </div>
+</div>
+
+<script>
+  let interval;
+  let totalSeconds = 0;
+  let running = false;
+
+  const display = document.getElementById('display');
+  const startBtn = document.getElementById('startBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const timerInput = document.getElementById('timerInput');
+  const startTimerBtn = document.getElementById('startTimerBtn');
+
+  function updateDisplay(seconds) {
+    const hrs = Math.floor(seconds / 3600).toString().padStart(2,'0');
+    const mins = Math.floor((seconds % 3600) / 60).toString().padStart(2,'0');
+    const secs = (seconds % 60).toString().padStart(2,'0');
+    display.textContent = `${hrs}:${mins}:${secs}`;
+  }
+
+  startBtn.onclick = () => {
+    if (!running) {
+      running = true;
+      interval = setInterval(() => {
+        totalSeconds++;
+        updateDisplay(totalSeconds);
+      }, 1000);
+    }
+  };
+
+  pauseBtn.onclick = () => {
+    running = false;
+    clearInterval(interval);
+  };
+
+  resetBtn.onclick = () => {
+    running = false;
+    clearInterval(interval);
+    totalSeconds = 0;
+    updateDisplay(totalSeconds);
+  };
+
+  startTimerBtn.onclick = () => {
+    const time = parseInt(timerInput.value);
+    if (isNaN(time) || time <= 0) return alert("Geçerli bir sayı girin.");
+    totalSeconds = time;
+    updateDisplay(totalSeconds);
+    running = true;
+
+    clearInterval(interval);
+    interval = setInterval(() => {
+      totalSeconds--;
+      if (totalSeconds <= 0) {
+        running = false;
+        clearInterval(interval);
+        alert("Zamanlayıcı sona erdi!");
+        updateDisplay(0);
+      } else {
+        updateDisplay(totalSeconds);
+      }
+    }, 1000);
+  };
+</script>

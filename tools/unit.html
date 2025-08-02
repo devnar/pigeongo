@@ -1,0 +1,46 @@
+<div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary max-w-md mx-auto">
+  <h2 class="text-xl font-semibold mb-4">Birim Dönüştürücü</h2>
+  <input id="unitInput" type="text" placeholder="Örnek: 100 km kaç mil eder?" 
+    class="w-full p-3 mb-4 bg-pigeon-dark rounded border border-border-light placeholder-text-muted" />
+  <button id="convertBtn" class="w-full bg-brand-yellow hover:bg-brand-yellow-hover text-pigeon-darker font-bold p-3 rounded">Dönüştür</button>
+  <p id="result" class="mt-4 text-text-secondary"></p>
+</div>
+
+<script>
+  const conversions = {
+    "km-mil": 0.621371,
+    "kg-lb": 2.20462,
+    "c-f": c => (c * 9/5) + 32,
+  };
+
+  document.getElementById('convertBtn').onclick = () => {
+    const input = document.getElementById('unitInput').value.toLowerCase();
+    let result = "Dönüşüm yapılamadı.";
+
+    // Basit örnek: "100 km kaç mil eder?"
+    const kmToMilMatch = input.match(/([\d\.]+)\s*km.*mil/);
+    if (kmToMilMatch) {
+      result = `${kmToMilMatch[1]} km = ${(kmToMilMatch[1] * conversions["km-mil"]).toFixed(2)} mil`;
+      document.getElementById('result').textContent = result;
+      return;
+    }
+    
+    // "100 kg kaç lb eder?"
+    const kgToLbMatch = input.match(/([\d\.]+)\s*kg.*lb/);
+    if (kgToLbMatch) {
+      result = `${kgToLbMatch[1]} kg = ${(kgToLbMatch[1] * conversions["kg-lb"]).toFixed(2)} lb`;
+      document.getElementById('result').textContent = result;
+      return;
+    }
+
+    // "25 c kaç f eder?"
+    const cToFMatch = input.match(/([\d\.]+)\s*c.*f/);
+    if (cToFMatch) {
+      result = `${cToFMatch[1]}°C = ${conversions["c-f"](parseFloat(cToFMatch[1])).toFixed(2)}°F`;
+      document.getElementById('result').textContent = result;
+      return;
+    }
+
+    document.getElementById('result').textContent = result;
+  }
+</script>
