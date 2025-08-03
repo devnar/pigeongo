@@ -58,7 +58,6 @@
     <main class="flex flex-col lg:flex-row p-4 lg:gap-8 sm:ml-20 max-w-full">
         <div class="order-2 lg:order-1 flex-1 space-y-6 max-w-2xl">
             <div id="results"><!-- Sonuçlar --></div>
-            <div id="pagination" class="flex justify-center items-center gap-4 mt-12 mb-8"></div>
         </div>
 
         <div id="tools" class="order-1 lg:order-2 w-full lg:w-64 mb-6 lg:mb-0 max-w-2xl">
@@ -74,7 +73,7 @@
 
         // Search variables
         let filter = "";
-        let history = JSON.parse(localStorage.getItem('pigeonGO_history') || '[]');
+        let history = JSON.parse(localStorage.getItem("pigeonGO_history") || "[]");
         let currentPage = 1;
         const resultsPerPage = 10;
         let totalPages = 0;
@@ -82,279 +81,212 @@
 
         // Get search query from URL
         const urlParams = new URLSearchParams(window.location.search);
-        const searchQuery = urlParams.get('q') || '';
-        const isLucky = urlParams.get('lucky') === 'true';
+        const searchQuery = urlParams.get("q") || "";
+        const isLucky = urlParams.get("lucky") === "true";
         const toolKeywords = {
             // Hesap Makinesi
             "hesap makinesi": "tools/calc.html",
-            "calculator": "tools/calc.html",
+            calculator: "tools/calc.html",
             "dört işlem": "tools/calc.html",
-            "matematik": "tools/calc.html",
-            "toplama": "tools/calc.html",
-            "çıkarma": "tools/calc.html",
-            "çarpma": "tools/calc.html",
-            "bölme": "tools/calc.html",
-            "hesapla": "tools/calc.html",
+            matematik: "tools/calc.html",
+            toplama: "tools/calc.html",
+            çıkarma: "tools/calc.html",
+            çarpma: "tools/calc.html",
+            bölme: "tools/calc.html",
+            hesapla: "tools/calc.html",
 
             // QR Code
-            "qr": "tools/qr.html",
+            qr: "tools/qr.html",
             "qr kod": "tools/qr.html",
             "qr code": "tools/qr.html",
-            "barkod": "tools/qr.html",
+            barkod: "tools/qr.html",
             "kod oluştur": "tools/qr.html",
             "qr oluştur": "tools/qr.html",
 
             // Find & Replace
             "find and replace": "tools/find.html",
             "bul ve değiştir": "tools/find.html",
-            "replace": "tools/find.html",
-            "bul": "tools/find.html",
-            "değiştir": "tools/find.html",
+            replace: "tools/find.html",
+            bul: "tools/find.html",
+            değiştir: "tools/find.html",
 
             // Birim Dönüştürücü
             "birim dönüştürücü": "tools/unit.html",
             "birim çevirici": "tools/unit.html",
-            "kg": "tools/unit.html",
-            "libre": "tools/unit.html",
-            "km": "tools/unit.html",
-            "mil": "tools/unit.html",
-            "santimetre": "tools/unit.html",
-            "inch": "tools/unit.html",
-            "sıcaklık": "tools/unit.html",
-            "celsius": "tools/unit.html",
-            "fahrenheit": "tools/unit.html",
-            "çevir": "tools/unit.html",
-            "dönüştür": "tools/unit.html",
+            kg: "tools/unit.html",
+            libre: "tools/unit.html",
+            km: "tools/unit.html",
+            mil: "tools/unit.html",
+            santimetre: "tools/unit.html",
+            inch: "tools/unit.html",
+            sıcaklık: "tools/unit.html",
+            celsius: "tools/unit.html",
+            fahrenheit: "tools/unit.html",
+            çevir: "tools/unit.html",
+            dönüştür: "tools/unit.html",
 
             // Kronometre ve Zamanlayıcı
-            "kronometre": "tools/stopwatch.html",
-            "zamanlayıcı": "tools/stopwatch.html",
-            "timer": "tools/stopwatch.html",
-            "stopwatch": "tools/stopwatch.html",
+            kronometre: "tools/stopwatch.html",
+            zamanlayıcı: "tools/stopwatch.html",
+            timer: "tools/stopwatch.html",
+            stopwatch: "tools/stopwatch.html",
             "geri sayım": "tools/stopwatch.html",
-            "sayacı": "tools/stopwatch.html",
+            sayacı: "tools/stopwatch.html",
             "kronometre başlat": "tools/stopwatch.html",
             "zaman sayacı": "tools/stopwatch.html",
 
             // Hava Durumu
             "hava durumu": "tools/weather.html",
-            "hava": "tools/weather.html",
-            "sıcaklık": "tools/weather.html",
-            "bulut": "tools/weather.html",
-            "yağmur": "tools/weather.html",
-            "kar": "tools/weather.html",
-            "rüzgar": "tools/weather.html",
-            "şehir": "tools/weather.html",
+            hava: "tools/weather.html",
+            sıcaklık: "tools/weather.html",
+            bulut: "tools/weather.html",
+            yağmur: "tools/weather.html",
+            kar: "tools/weather.html",
+            rüzgar: "tools/weather.html",
+            şehir: "tools/weather.html",
             "şehir hava durumu": "tools/weather.html",
-            "weather": "tools/weather.html",
+            weather: "tools/weather.html",
         };
-
 
         function loadToolForQuery(query) {
             const toolsDiv = document.getElementById("tools");
             toolsDiv.innerHTML = "";
 
-            const match = Object.keys(toolKeywords).find(keyword =>
-                query.toLowerCase().includes(keyword)
-            );
+            const match = Object.keys(toolKeywords).find((keyword) => query.toLowerCase().includes(keyword));
 
             if (match) {
                 const url = toolKeywords[match];
                 fetch(url)
-                .then(res => res.text())
-                .then(html => {
-                    toolsDiv.innerHTML = html;
+                    .then((res) => res.text())
+                    .then((html) => {
+                        toolsDiv.innerHTML = html;
 
-                    // Scriptleri çalıştır
-                    const tempDiv = document.createElement("div");
-                    tempDiv.innerHTML = html;
-                    const scripts = tempDiv.querySelectorAll("script");
+                        // Scriptleri çalıştır
+                        const tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = html;
+                        const scripts = tempDiv.querySelectorAll("script");
 
-                    scripts.forEach(oldScript => {
-                    const newScript = document.createElement("script");
-                    if (oldScript.src) newScript.src = oldScript.src;
-                    else newScript.textContent = oldScript.textContent;
-                    document.body.appendChild(newScript);
+                        scripts.forEach((oldScript) => {
+                            const newScript = document.createElement("script");
+                            if (oldScript.src) newScript.src = oldScript.src;
+                            else newScript.textContent = oldScript.textContent;
+                            document.body.appendChild(newScript);
+                        });
+                    })
+                    .catch(() => {
+                        // Eğer araç da bulunamadıysa Wikipedia göster
+                        loadWikipediaSummary(query);
                     });
-                })
-                .catch(() => {
-                    // Eğer araç da bulunamadıysa Wikipedia göster
-                    loadWikipediaSummary(query);
-                });
             } else {
                 // Araç yoksa Wikipedia göster
                 loadWikipediaSummary(query);
             }
         }
 
-
         function loadWikipediaSummary(query) {
             const toolsDiv = document.getElementById("tools");
             const apiUrl = `https://tr.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
 
             fetch(apiUrl)
-                .then(res => {
-                if (!res.ok) throw new Error("Yok");
-                return res.json();
+                .then((res) => {
+                    if (!res.ok) throw new Error("Yok");
+                    return res.json();
                 })
-                .then(data => {
-                toolsDiv.innerHTML = `
-                    <div class="bg-pigeon-card p-4 rounded-xl border border-border-light shadow-md space-y-4">
-                    <h2 class="text-lg font-semibold text-brand-yellow">${data.title}</h2>
-                    ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}" class="w-full rounded" />` : ""}
-                    <p class="text-text-secondary leading-relaxed">${data.extract}</p>
-                    ${data.content_urls?.desktop?.page ? `
-                        <a href="${data.content_urls.desktop.page}" target="_blank" class="text-accent-blue hover:underline">Wikipedi'de oku</a>` : ""}
-                    </div>
-                `;
+                .then((data) => {
+                    toolsDiv.innerHTML = `
+                            <div class="bg-pigeon-card p-4 rounded-xl border border-border-light shadow-md space-y-4">
+                            <h2 class="text-lg font-semibold text-brand-yellow">${data.title}</h2>
+                            ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}" class="w-full rounded" />` : ""}
+                            <p class="text-text-secondary leading-relaxed">${data.extract}</p>
+                            ${
+                                data.content_urls?.desktop?.page
+                                    ? `
+                                <a href="${data.content_urls.desktop.page}" target="_blank" class="text-accent-blue hover:underline">Wikipedi'de oku</a>`
+                                    : ""
+                            }
+                            </div>
+                        `;
                 })
                 .catch(() => {});
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener("DOMContentLoaded", function () {
             if (searchQuery) {
-                document.getElementById('searchQuery').value = searchQuery;
-                document.getElementById('pageTitle').textContent = `${searchQuery} - pigeonGO Arama Sonuçları`;
+                document.getElementById("searchQuery").value = searchQuery;
+                document.getElementById("pageTitle").textContent = `${searchQuery} - pigeonGO Arama Sonuçları`;
                 currentQuery = searchQuery;
                 search();
+                window.addEventListener("scroll", infiniteScrollHandler);
             } else {
-                window.location.href = 'index.html';
+                window.location.href = "index.html";
             }
         });
 
-        function showToolIframe(query) {
-            const toolsDiv = document.getElementById("tools");
-            toolsDiv.innerHTML = "";
-
-            const match = Object.keys(embeddedTools).find(toolKeyword => 
-                query.toLowerCase().includes(toolKeyword)
-            );
-
-            if (match) {
-                const iframe = document.createElement("iframe");
-                iframe.src = embeddedTools[match];
-                iframe.className = "w-full h-[500px] rounded border border-border-light";
-                iframe.loading = "lazy";
-                iframe.referrerPolicy = "no-referrer";
-                toolsDiv.appendChild(iframe);
-            } else {
-                toolsDiv.innerHTML = ""; 
+        // Sonsuz kaydırma
+        function infiniteScrollHandler() {
+            if (isFetching) return;
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            if (scrollTop + clientHeight >= scrollHeight - 200) {
+                if (currentPage < 10) {
+                    currentPage++;
+                    search(true);
+                }
             }
         }
 
-        // Set search filter
         function setFilter(type) {
             filter = type;
             currentPage = 1;
-            
-            // Update active filter button
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                btn.classList.add('text-text-tertiary');
-            });
-            event.target.classList.add('active');
-            event.target.classList.remove('text-text-tertiary');
-            
+            document.getElementById("results").innerHTML = "";
+            document.querySelectorAll(".filter-btn").forEach((btn) => btn.classList.remove("active", "text-text-tertiary"));
+            event.target.classList.add("active");
+            event.target.classList.remove("text-text-tertiary");
             search();
         }
 
-        // Main search function
-        function search() {
-            const queryInput = document.getElementById("searchQuery");
-            const query = queryInput.value.trim() || currentQuery;
+        function search(append = false) {
+            if (!currentQuery) return;
+            const query = currentQuery;
             const loading = document.getElementById("loading");
-
-            if (!query) {
-                alert("Lütfen arama terimi girin.");
-                return;
-            }
 
             loadToolForQuery(query);
 
-            // Add to history
-            if (!history.includes(query)) {
-                history.unshift(query);
-                if (history.length > 10) {
-                    history = history.slice(0, 10);
-                }
-                localStorage.setItem('pigeonGO_history', JSON.stringify(history));
-            }
-
-            currentQuery = query;
-
-            // Determine search query based on filter
             let queryToSend = query;
-            if (filter === "news") {
-                queryToSend += " site:trthaber.com OR site:hurriyet.com.tr OR site:sabah.com.tr";
-            } else if (filter === "shopping") {
-                queryToSend += " site:amazon.com OR site:hepsiburada.com OR site:trendyol.com";
-            }
+            if (filter === "news") queryToSend += " site:trthaber.com OR site:hurriyet.com.tr OR site:sabah.com.tr";
+            else if (filter === "shopping") queryToSend += " site:amazon.com OR site:hepsiburada.com OR site:trendyol.com";
 
-            // Build API URL
             let url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(queryToSend)}&start=${(currentPage - 1) * resultsPerPage + 1}`;
-            
-            if (filter === "image") {
-                url += "&searchType=image";
-            }
+            if (filter === "image") url += "&searchType=image";
 
-            // Show loading
             loading.classList.remove("hidden");
-            document.getElementById("results").innerHTML = "";
+            isFetching = true;
 
-            // Make API request
             fetch(url)
                 .then((res) => res.json())
                 .then((data) => {
                     loading.classList.add("hidden");
-                    displayResults(data);
+                    isFetching = false;
+                    displayResults(data, append);
                 })
                 .catch((err) => {
                     loading.classList.add("hidden");
+                    isFetching = false;
                     console.error("Arama hatası:", err);
-                    document.getElementById("results").innerHTML = 
-                        '<div class="text-center py-8"><p class="text-accent-red">Arama sırasında bir hata oluştu. Lütfen API anahtarınızı kontrol edin.</p></div>';
                 });
         }
 
-        // Display search results
-        function displayResults(data) {
+        function displayResults(data, append = false) {
             const resultsDiv = document.getElementById("results");
-            
-            resultsDiv.innerHTML = "";
+            if (!append) resultsDiv.innerHTML = "";
+            if (data.promotions && data.promotions.length > 0) {
+                data.promotions.forEach((promo) => {
+                    const title = promo.title || promo.displayLink || "Sponsorlu";
+                    const link = promo.link;
+                    const snippet = promo.bodyLines?.map(line => line.text).join(" ") || "";
+                    const image = promo.image?.source || "";
 
-            if (!data.items || data.items.length === 0) {
-                resultsDiv.innerHTML = '<div class="text-center py-8"><p class="text-text-tertiary">Sonuç bulunamadı.</p></div>';
-                return;
-            }
-
-            // Show results info
-            const totalResults = parseInt(data.searchInformation?.totalResults || "0", 10);
-            const searchTime = parseFloat(data.searchInformation?.searchTime || "0").toFixed(2);
-            
-            // Calculate total pages
-            totalPages = Math.min(Math.ceil(totalResults / resultsPerPage), 10);
-
-            // Display results
-            data.items.forEach((item) => {
-                console.log(item);
-                const title = item.title;
-                const link = item.link;
-                const snippet = item.snippet;
-                const image = item.pagemap?.cse_image?.[0]?.src || "";
-
-                const resultItem = document.createElement("div");
-            
-                if (filter === "image") {
-                    resultsDiv.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
-                    resultItem.className = "";
-                    resultItem.innerHTML = `
-                        <a href="${link}" target="_blank" rel="noopener noreferrer" class="block">
-                            <img src="${link}" alt="${title}" class="max-h-48 object-contain rounded mb-2" onerror="this.style.display='none'">
-                        </a>
-                    `;
-                } else {
-                    resultsDiv.className = "space-y-6";
+                    const resultItem = document.createElement("div");
                     resultItem.className = "result-item p-4 bg-pigeon-card rounded-lg shadow-lg hover:shadow-xl border border-border-light";
                     resultItem.innerHTML = `
                         <div class="flex items-start gap-2 mb-1">
@@ -370,85 +302,63 @@
                         <p class="text-text-secondary text-sm leading-relaxed mb-2">${snippet}</p>
                         ${image ? `<img src="${image}" alt="" class="mt-2 max-h-32 object-contain rounded border border-border-light" onerror="this.style.display='none'">` : ""}
                     `;
+                    resultsDiv.appendChild(resultItem);
+                });
+            }
+
+            if (!data.items || data.items.length === 0) {
+                if (!append) resultsDiv.innerHTML = '<div class="text-center py-8"><p class="text-text-tertiary">Sonuç bulunamadı.</p></div>';
+                return;
+            }
+
+            data.items.forEach((item) => {
+                const title = item.title;
+                const link = item.link;
+                const snippet = item.snippet;
+                const image = item.pagemap?.cse_image?.[0]?.src || "";
+
+                const resultItem = document.createElement("div");
+
+                if (filter === "image") {
+                    resultsDiv.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
+                    resultItem.innerHTML = `
+                <a href="${link}" target="_blank" rel="noopener noreferrer">
+                <img src="${link}" alt="${title}" class="max-h-48 object-contain rounded mb-2" onerror="this.style.display='none'">
+                </a>`;
+                } else {
+                    resultsDiv.className = "space-y-6";
+                    resultItem.className = "result-item p-4 bg-pigeon-card rounded-lg shadow-lg border border-border-light";
+                    resultItem.innerHTML = `
+                <div class="flex items-start gap-2 mb-1">
+                <a href="${link}" target="_blank" class="text-text-muted text-sm break-all">${link}</a>
+                </div>
+                <h3 class="text-xl text-brand-yellow hover:text-brand-yellow-hover">
+                <a href="${link}" target="_blank">${title}</a>
+                </h3>
+                <p class="text-text-secondary text-sm">${snippet}</p>
+                ${image ? `<img src="${image}" class="mt-2 max-h-32 object-contain rounded border border-border-light">` : ""}`;
                 }
 
                 resultsDiv.appendChild(resultItem);
             });
 
-            updatePagination();
-
-            // Handle lucky search
             if (isLucky && data.items.length > 0) {
-                setTimeout(() => {
-                    window.open(data.items[0].link, '_blank');
-                }, 1000);
+                setTimeout(() => window.open(data.items[0].link, "_blank"), 1000);
             }
         }
 
-        // Update pagination
-        function updatePagination() {
-            const pagination = document.getElementById("pagination");
-            pagination.innerHTML = "";
-
-            if (totalPages <= 1) return;
-
-            // Previous button
-            const prevBtn = document.createElement("button");
-            prevBtn.textContent = "Önceki";
-            prevBtn.className = "pagination-btn px-4 py-2 bg-pigeon-card text-text-primary rounded-lg border border-border-medium transition-all hover:bg-pigeon-card-hover";
-            prevBtn.disabled = currentPage === 1;
-            if (prevBtn.disabled) {
-                prevBtn.className += " opacity-50 cursor-not-allowed";
-            }
-            prevBtn.onclick = () => {
-                currentPage--;
-                search();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-            pagination.appendChild(prevBtn);
-
-            // Page info
-            const info = document.createElement("span");
-            info.textContent = `Sayfa ${currentPage} / ${totalPages}`;
-            info.className = "text-text-tertiary px-4 font-medium";
-            pagination.appendChild(info);
-
-            // Next button
-            const nextBtn = document.createElement("button");
-            nextBtn.textContent = "Sonraki";
-            nextBtn.className = "pagination-btn px-4 py-2 bg-pigeon-card text-text-primary rounded-lg border border-border-medium transition-all hover:bg-pigeon-card-hover";
-            nextBtn.disabled = currentPage >= totalPages;
-            if (nextBtn.disabled) {
-                nextBtn.className += " opacity-50 cursor-not-allowed";
-            }
-            nextBtn.onclick = () => {
-                currentPage++;
-                search();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-            pagination.appendChild(nextBtn);
-        }
-
-        // Handle new search from results page
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
+        document.getElementById("searchForm").addEventListener("submit", function (e) {
             e.preventDefault();
-            const newQuery = document.getElementById('searchQuery').value.trim();
+            const newQuery = document.getElementById("searchQuery").value.trim();
             if (newQuery) {
                 currentQuery = newQuery;
                 currentPage = 1;
                 filter = "";
-                
-                // Reset filter buttons
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                    btn.classList.add('text-text-tertiary');
-                });
-                document.querySelector('.filter-btn').classList.add('active');
-                document.querySelector('.filter-btn').classList.remove('text-text-tertiary');
-                
+                document.getElementById("results").innerHTML = "";
                 search();
             }
         });
+
     </script>
     <script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </body>
