@@ -1,4 +1,4 @@
-<div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary max-w-md mx-auto">
+<div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary mx-auto">
   <h2 class="text-xl font-semibold mb-4">Birim Dönüştürücü</h2>
   <input id="unitInput" type="text" placeholder="Örnek: 100 km kaç mil eder?" 
     class="w-full p-3 mb-4 bg-pigeon-dark rounded border border-border-light placeholder-text-muted" />
@@ -7,7 +7,7 @@
 </div>
 
 <script>
-  const conversions = {
+  let conversions = {
     "km-mil": 0.621371,
     "kg-lb": 2.20462,
     "c-f": c => (c * 9/5) + 32,
