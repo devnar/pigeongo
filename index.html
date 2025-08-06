@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PigeonGo - Arama Yapın</title>
+    <title>PigeonGo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="assets/tailwind.config.js"></script>
     <link rel="icon" href="https://devnar.github.io/logos/pigeongo.png" type="image/png">
@@ -90,9 +90,15 @@
         // Search functionality
         const searchForm = document.getElementById('searchForm');
         const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
         const luckyBtn = document.getElementById('luckyBtn');
         const suggestionsDropdown = document.getElementById('suggestionsDropdown');
+
+        const commandSuggestions = [
+            ".calc",
+            ".timer",
+            ".weather",
+            ".unit"
+        ];
 
         // Load search history on page load
         updateSuggestions();
@@ -100,11 +106,6 @@
         // Handle form submission
         searchForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            performSearch();
-        });
-
-        // Handle search button click
-        searchBtn.addEventListener('click', function() {
             performSearch();
         });
 
@@ -134,17 +135,20 @@
         // Update search suggestions
         function updateSuggestions() {
             const datalist = document.getElementById("searchSuggestions");
-            datalist.innerHTML = history
+            const combined = [...commandSuggestions, ...history];
+            datalist.innerHTML = combined
                 .map((q) => `<option value="${q}"></option>`)
                 .join("");
         }
 
+
         // Show suggestions dropdown
         function showSuggestions() {
-            if (history.length > 0) {
-                suggestionsDropdown.innerHTML = history
-                    .map(query => `<div class="suggestion-item text-text-primary" onclick="selectSuggestion('${query}')">${query}</div>`)
-                    .join('');
+            const combined = [...commandSuggestions, ...history];
+            if (combined.length > 0) {
+                suggestionsDropdown.innerHTML = combined
+                .map(query => `<div class="suggestion-item text-text-primary px-4 py-2 cursor-pointer hover:bg-border-light" onclick="selectSuggestion('${query}')">${query}</div>`)
+                .join('');
                 suggestionsDropdown.classList.remove('hidden');
             }
         }
@@ -165,22 +169,20 @@
 
 
         searchInput.addEventListener('input', function() {
-            if (this.value.length > 0) {
-                const filteredHistory = history.filter(item => 
-                    item.toLowerCase().includes(this.value.toLowerCase())
-                );
-                if (filteredHistory.length > 0) {
-                    suggestionsDropdown.innerHTML = filteredHistory
-                        .map(query => `<div class="suggestion-item text-text-primary" onclick="selectSuggestion('${query}')">${query}</div>`)
-                        .join('');
-                    suggestionsDropdown.classList.remove('hidden');
-                } else {
-                    suggestionsDropdown.classList.add('hidden');
-                }
+            const term = this.value.toLowerCase();
+            const combined = [...commandSuggestions, ...history];
+            const filtered = combined.filter(item => item.toLowerCase().includes(term));
+            
+            if (filtered.length > 0) {
+                suggestionsDropdown.innerHTML = filtered
+                .map(query => `<div class="suggestion-item text-text-primary px-4 py-2 cursor-pointer hover:bg-border-light" onclick="selectSuggestion('${query}')">${query}</div>`)
+                .join('');
+                suggestionsDropdown.classList.remove('hidden');
             } else {
-                showSuggestions();
+                suggestionsDropdown.classList.add('hidden');
             }
         });
+
 
         // Focus on search input when page loads
         window.addEventListener('load', function() {
@@ -215,5 +217,4 @@
     </script>
     <script async="" src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </body>
-<script>window.addEventListener("DOMContentLoaded", loadFavorites);</script>
 </html>

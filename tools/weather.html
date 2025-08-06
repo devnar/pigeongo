@@ -1,35 +1,36 @@
 <div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary mx-auto">
-  <h2 class="text-xl font-semibold mb-4">Hava Durumu</h2>
-  <input id="cityInput" type="text" placeholder="Şehir adı girin" 
-    class="w-full p-3 mb-4 bg-pigeon-dark rounded border border-border-light placeholder-text-muted" />
-  <button id="getWeatherBtn" class="w-full bg-brand-yellow hover:bg-brand-yellow-hover text-pigeon-darker font-bold p-3 rounded">Getir</button>
+  <h2 class="text-xl font-semibold mb-4">Weather</h2>
+  <input id="cityInput" type="text" placeholder="Şehir adı girin" class="hidden w-full p-3 mb-4 bg-pigeon-dark rounded border border-border-light placeholder-text-muted" />
+  <button id="getWeatherBtn" class="hidden w-full bg-brand-yellow hover:bg-brand-yellow-hover text-pigeon-darker font-bold p-3 rounded">Getir</button>
   <div id="weatherResult" class="mt-4 text-text-secondary"></div>
 </div>
 
 <script>
   const weatherApiKey = 'ec7b315cf3694b0f801133734242206'; // weatherapi.com API anahtarını buraya yaz
 
-  document.getElementById('getWeatherBtn').onclick = async () => {
-    const city = document.getElementById('cityInput').value.trim();
-    if (!city) return alert('Lütfen şehir adı girin.');
+    function initWeatherTool() {
+    document.getElementById('getWeatherBtn').onclick = async () => {
+      const city = document.getElementById('cityInput').value.trim();
+      if (!city) return alert('Lütfen şehir adı girin.');
 
-    const url = `https://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=${encodeURIComponent(city)}&lang=tr`;
+      const url = `https://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=${encodeURIComponent(city)}&lang=tr`;
 
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Şehir bulunamadı.');
-      const data = await res.json();
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Şehir bulunamadı.');
+        const data = await res.json();
 
-      document.getElementById('weatherResult').innerHTML = `
-        <p><strong>${data.location.name}</strong>, ${data.location.country}</p>
-        <p>Sıcaklık: ${data.current.temp_c}°C</p>
-        <p>Hissedilen: ${data.current.feelslike_c}°C</p>
-        <p>Nem: ${data.current.humidity}%</p>
-        <p>Durum: ${data.current.condition.text}</p>
-        <img src="${data.current.condition.icon}" alt="Durum Ikonu" class="inline-block" />
-      `;
-    } catch (error) {
-      document.getElementById('weatherResult').textContent = error.message || 'Hava durumu alınamadı.';
-    }
-  };
+        document.getElementById('weatherResult').innerHTML = `
+          <p><strong>${data.location.name}</strong>, ${data.location.country}</p>
+          <p>Sıcaklık: ${data.current.temp_c}°C</p>
+          <p>Hissedilen: ${data.current.feelslike_c}°C</p>
+          <p>Nem: ${data.current.humidity}%</p>
+          <p>Durum: ${data.current.condition.text}</p>
+          <img src="${data.current.condition.icon}" alt="Durum Ikonu" class="inline-block" />
+        `;
+      } catch (error) {
+        document.getElementById('weatherResult').textContent = error.message || 'Hava durumu alınamadı.';
+      }
+    };
+  }
 </script>

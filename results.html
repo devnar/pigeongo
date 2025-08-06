@@ -14,7 +14,7 @@
     <header class="p-4 sticky top-0 bg-pigeon-dark z-10">
         <div class="max-w-6xl  flex items-center gap-6">
             <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                <img src="https://devnar.github.io/logos/pigeongo.png" alt="pigeonGO Logo" class="w-12 h-12 rounded">
+                <img src="https://devnar.github.io/logos/pigeongo.png" alt="PigeonGo Logo" class="w-12 h-12 rounded">
             </a>
 
             <form id="searchForm" class="flex-1 max-w-2xl">
@@ -43,6 +43,7 @@
         <div class="flex gap-6 text-sm">
             <button class="filter-btn active pb-2 transition-colors" onclick="setFilter('');document.getElementById('tools').classList.remove('hidden')">Tümü</button>
             <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('image');document.getElementById('tools').classList.add('hidden')">Görseller</button>
+            <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('video');document.getElementById('tools').classList.add('hidden')">Video</button>
             <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('news');document.getElementById('tools').classList.add('hidden')">Haberler</button>
             <button class="filter-btn text-text-tertiary hover:text-text-primary pb-2 transition-colors" onclick="setFilter('shopping');document.getElementById('tools').classList.add('hidden')">Alışveriş</button>
         </div>
@@ -73,95 +74,39 @@
 
         // Search variables
         let filter = "";
-        let history = JSON.parse(localStorage.getItem("pigeonGO_history") || "[]");
+        let searchHistory  = JSON.parse(localStorage.getItem("PigeonGo_history") || "[]");
         let currentPage = 1;
         const resultsPerPage = 10;
         let totalPages = 0;
         let currentQuery = "";
-
+        let isFetching = false;
+        
         // Get search query from URL
         const urlParams = new URLSearchParams(window.location.search);
         const searchQuery = urlParams.get("q") || "";
         const isLucky = urlParams.get("lucky") === "true";
-        const toolKeywords = {
-            // Hesap Makinesi
-            "hesap makinesi": "tools/calc.html",
-            calculator: "tools/calc.html",
-            "dört işlem": "tools/calc.html",
-            matematik: "tools/calc.html",
-            toplama: "tools/calc.html",
-            çıkarma: "tools/calc.html",
-            çarpma: "tools/calc.html",
-            bölme: "tools/calc.html",
-            hesapla: "tools/calc.html",
-
-            // QR Code
-            qr: "tools/qr.html",
-            "qr kod": "tools/qr.html",
-            "qr code": "tools/qr.html",
-            barkod: "tools/qr.html",
-            "kod oluştur": "tools/qr.html",
-            "qr oluştur": "tools/qr.html",
-
-            // Find & Replace
-            "find and replace": "tools/find.html",
-            "bul ve değiştir": "tools/find.html",
-            replace: "tools/find.html",
-            bul: "tools/find.html",
-            değiştir: "tools/find.html",
-
-            // Birim Dönüştürücü
-            "birim dönüştürücü": "tools/unit.html",
-            "birim çevirici": "tools/unit.html",
-            kg: "tools/unit.html",
-            libre: "tools/unit.html",
-            km: "tools/unit.html",
-            mil: "tools/unit.html",
-            santimetre: "tools/unit.html",
-            inch: "tools/unit.html",
-            sıcaklık: "tools/unit.html",
-            celsius: "tools/unit.html",
-            fahrenheit: "tools/unit.html",
-            çevir: "tools/unit.html",
-            dönüştür: "tools/unit.html",
-
-            // Kronometre ve Zamanlayıcı
-            kronometre: "tools/stopwatch.html",
-            zamanlayıcı: "tools/stopwatch.html",
-            timer: "tools/stopwatch.html",
-            stopwatch: "tools/stopwatch.html",
-            "geri sayım": "tools/stopwatch.html",
-            sayacı: "tools/stopwatch.html",
-            "kronometre başlat": "tools/stopwatch.html",
-            "zaman sayacı": "tools/stopwatch.html",
-
-            // Hava Durumu
-            "hava durumu": "tools/weather.html",
-            hava: "tools/weather.html",
-            sıcaklık: "tools/weather.html",
-            bulut: "tools/weather.html",
-            yağmur: "tools/weather.html",
-            kar: "tools/weather.html",
-            rüzgar: "tools/weather.html",
-            şehir: "tools/weather.html",
-            "şehir hava durumu": "tools/weather.html",
-            weather: "tools/weather.html",
+        const toolCommands = {
+            ".calc": "tools/calc.html",
+            ".timer": "tools/stopwatch.html",
+            ".weather": "tools/weather.html",
+            ".unit": "tools/unit.html",
         };
 
         function loadToolForQuery(query) {
             const toolsDiv = document.getElementById("tools");
             toolsDiv.innerHTML = "";
 
-            const match = Object.keys(toolKeywords).find((keyword) => query.toLowerCase().includes(keyword));
+            const commandKey = Object.keys(toolCommands).find((prefix) => query.startsWith(prefix));
 
-            if (match) {
-                const url = toolKeywords[match];
-                fetch(url)
+            if (commandKey) {
+                const toolUrl = toolCommands[commandKey];
+                const toolArgs = query.slice(commandKey.length).trim();
+
+                fetch(toolUrl)
                     .then((res) => res.text())
                     .then((html) => {
                         toolsDiv.innerHTML = html;
 
-                        // Scriptleri çalıştır
                         const tempDiv = document.createElement("div");
                         tempDiv.innerHTML = html;
                         const scripts = tempDiv.querySelectorAll("script");
@@ -172,13 +117,67 @@
                             else newScript.textContent = oldScript.textContent;
                             document.body.appendChild(newScript);
                         });
+
+                        // Komuta özel input ayarları
+                        setTimeout(() => {
+                            // .calc
+                            if (toolUrl.includes("calc.html")) {
+                                if (typeof initCalculator === "function") {
+                                    initCalculator(toolsDiv); // toolsDiv parametresi ile çağırıyoruz
+                                }
+
+                                const inputEl = toolsDiv.querySelector("#calcInput");
+                                if (inputEl && toolArgs) {
+                                    try {
+                                    inputEl.value = toolArgs;
+                                    inputEl.value = eval(toolArgs).toString();
+                                    } catch {
+                                    inputEl.value = "Hata";
+                                    }
+                                }
+                            }
+
+                            // .timer
+                            if (toolUrl.includes("stopwatch.html")) {
+                                const secs = parseInt(toolArgs);
+                                if (!isNaN(secs)) {
+                                    const timerInput = toolsDiv.querySelector("#timerInput");
+                                    if (timerInput) {
+                                        timerInput.value = secs;
+                                        const startBtn = toolsDiv.querySelector("#startTimerBtn");
+                                        if (startBtn) startBtn.click();
+                                    }
+                                }
+                            }
+
+                            // .weather
+                            if (toolUrl.includes("weather.html")) {
+                                const cityInput = toolsDiv.querySelector("#cityInput");
+                                const getWeatherBtn = toolsDiv.querySelector("#getWeatherBtn");
+
+                                if (typeof initWeatherTool === "function") initWeatherTool();
+
+                                if (cityInput && getWeatherBtn && toolArgs.length > 0) {
+                                    cityInput.value = toolArgs;
+                                    getWeatherBtn.click(); // otomatik tıklatma
+                                }
+                            }
+
+                            // .unit
+                            if (toolUrl.includes("unit.html")) {
+                                const unitInput = toolsDiv.querySelector("#unitInput");
+                                if (unitInput && toolArgs) {
+                                    unitInput.value = toolArgs;
+                                    const convertBtn = toolsDiv.querySelector("#convertBtn");
+                                    if (convertBtn) convertBtn.click();
+                                }
+                            }
+                        }, 100);
                     })
                     .catch(() => {
-                        // Eğer araç da bulunamadıysa Wikipedia göster
                         loadWikipediaSummary(query);
                     });
             } else {
-                // Araç yoksa Wikipedia göster
                 loadWikipediaSummary(query);
             }
         }
@@ -194,18 +193,18 @@
                 })
                 .then((data) => {
                     toolsDiv.innerHTML = `
-                            <div class="bg-pigeon-card p-4 rounded-xl border border-border-light shadow-md space-y-4">
-                            <h2 class="text-lg font-semibold text-brand-yellow">${data.title}</h2>
-                            ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}" class="w-full rounded" />` : ""}
-                            <p class="text-text-secondary leading-relaxed">${data.extract}</p>
-                            ${
-                                data.content_urls?.desktop?.page
-                                    ? `
-                                <a href="${data.content_urls.desktop.page}" target="_blank" class="text-accent-blue hover:underline">Wikipedi'de oku</a>`
-                                    : ""
-                            }
-                            </div>
-                        `;
+                                    <div class="bg-pigeon-card p-4 rounded-xl border border-border-light shadow-md space-y-4">
+                                    <h2 class="text-lg font-semibold text-brand-yellow">${data.title}</h2>
+                                    ${data.thumbnail ? `<img src="${data.thumbnail.source}" alt="${data.title}" class="w-full rounded" />` : ""}
+                                    <p class="text-text-secondary leading-relaxed">${data.extract}</p>
+                                    ${
+                                        data.content_urls?.desktop?.page
+                                            ? `
+                                        <a href="${data.content_urls.desktop.page}" target="_blank" class="text-accent-blue hover:underline">Wikipedi'de oku</a>`
+                                            : ""
+                                    }
+                                    </div>
+                                `;
                 })
                 .catch(() => {});
         }
@@ -214,7 +213,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             if (searchQuery) {
                 document.getElementById("searchQuery").value = searchQuery;
-                document.getElementById("pageTitle").textContent = `${searchQuery} - pigeonGO Arama Sonuçları`;
+                document.title = `${searchQuery} - PigeonGo'da Ara`;
                 currentQuery = searchQuery;
                 search();
                 window.addEventListener("scroll", infiniteScrollHandler);
@@ -254,7 +253,8 @@
 
             let queryToSend = query;
             if (filter === "news") queryToSend += " site:trthaber.com OR site:hurriyet.com.tr OR site:sabah.com.tr";
-            else if (filter === "shopping") queryToSend += " site:amazon.com OR site:hepsiburada.com OR site:trendyol.com";
+            else if (filter === "video") queryToSend += " site:youtube.com";
+            else if (filter === "shopping") queryToSend += " site:amazon.com OR site:walmart.com OR site:ebay.com OR site:hepsiburada.com OR site:trendyol.com OR site:aliexpress.com OR site:temu.com";
 
             let url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(queryToSend)}&start=${(currentPage - 1) * resultsPerPage + 1}`;
             if (filter === "image") url += "&searchType=image";
@@ -283,25 +283,25 @@
                 data.promotions.forEach((promo) => {
                     const title = promo.title || promo.displayLink || "Sponsorlu";
                     const link = promo.link;
-                    const snippet = promo.bodyLines?.map(line => line.text).join(" ") || "";
+                    const snippet = promo.bodyLines?.map((line) => line.text).join(" ") || "";
                     const image = promo.image?.source || "";
 
                     const resultItem = document.createElement("div");
                     resultItem.className = "result-item p-4 bg-pigeon-card rounded-lg shadow-lg hover:shadow-xl border border-border-light";
                     resultItem.innerHTML = `
-                        <div class="flex items-start gap-2 mb-1">
-                            <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-text-muted-hover text-sm result-link break-all">
-                                ${link}
-                            </a>
-                        </div>
-                        <h3 class="text-xl text-brand-yellow hover:text-brand-yellow-hover mb-2">
-                            <a href="${link}" class="result-link" target="_blank" rel="noopener noreferrer">
-                                ${title}
-                            </a>
-                        </h3>
-                        <p class="text-text-secondary text-sm leading-relaxed mb-2">${snippet}</p>
-                        ${image ? `<img src="${image}" alt="" class="mt-2 max-h-32 object-contain rounded border border-border-light" onerror="this.style.display='none'">` : ""}
-                    `;
+                                <div class="flex items-start gap-2 mb-1">
+                                    <a href="${link}" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-text-muted-hover text-sm result-link break-all">
+                                        ${link}
+                                    </a>
+                                </div>
+                                <h3 class="text-xl text-brand-yellow hover:text-brand-yellow-hover mb-2">
+                                    <a href="${link}" class="result-link" target="_blank" rel="noopener noreferrer">
+                                        ${title}
+                                    </a>
+                                </h3>
+                                <p class="text-text-secondary text-sm leading-relaxed mb-2">${snippet}</p>
+                                ${image ? `<img src="${image}" alt="" class="mt-2 max-h-32 object-contain rounded border border-border-light" onerror="this.style.display='none'">` : ""}
+                            `;
                     resultsDiv.appendChild(resultItem);
                 });
             }
@@ -322,21 +322,21 @@
                 if (filter === "image") {
                     resultsDiv.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
                     resultItem.innerHTML = `
-                <a href="${link}" target="_blank" rel="noopener noreferrer">
-                <img src="${link}" alt="${title}" class="max-h-48 object-contain rounded mb-2" onerror="this.style.display='none'">
-                </a>`;
+                        <a href="${link}" target="_blank" rel="noopener noreferrer">
+                        <img src="${link}" alt="${title}" class="max-h-48 object-contain rounded mb-2" onerror="this.style.display='none'">
+                        </a>`;
                 } else {
                     resultsDiv.className = "space-y-6";
                     resultItem.className = "result-item p-4 bg-pigeon-card rounded-lg shadow-lg border border-border-light";
                     resultItem.innerHTML = `
-                <div class="flex items-start gap-2 mb-1">
-                <a href="${link}" target="_blank" class="text-text-muted text-sm break-all">${link}</a>
-                </div>
-                <h3 class="text-xl text-brand-yellow hover:text-brand-yellow-hover">
-                <a href="${link}" target="_blank">${title}</a>
-                </h3>
-                <p class="text-text-secondary text-sm">${snippet}</p>
-                ${image ? `<img src="${image}" class="mt-2 max-h-32 object-contain rounded border border-border-light">` : ""}`;
+                        <div class="flex items-start gap-2 mb-1">
+                        <a href="${link}" target="_blank" class="text-text-muted text-sm break-all">${link}</a>
+                        </div>
+                        <h3 class="text-xl text-brand-yellow hover:text-brand-yellow-hover">
+                        <a href="${link}" target="_blank">${title}</a>
+                        </h3>
+                        <p class="text-text-secondary text-sm">${snippet}</p>
+                        ${image ? `<img src="${image}" class="mt-2 max-h-32 object-contain rounded border border-border-light">` : ""}`;
                 }
 
                 resultsDiv.appendChild(resultItem);
@@ -351,6 +351,11 @@
             e.preventDefault();
             const newQuery = document.getElementById("searchQuery").value.trim();
             if (newQuery) {
+                // URL'yi güncelle
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set("q", newQuery);
+                history.pushState(null, "", newUrl.toString());
+
                 currentQuery = newQuery;
                 currentPage = 1;
                 filter = "";

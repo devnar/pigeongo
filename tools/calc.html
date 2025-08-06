@@ -1,5 +1,5 @@
 <!-- tools/calc.html -->
-<div class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary mx-auto">
+<div id="calcContainer" class="bg-pigeon-card p-6 rounded-lg shadow-lg text-text-primary mx-auto">
   <input id="calcInput" type="text" class="w-full p-3 mb-4 bg-pigeon-dark rounded border border-border-light text-xl text-right placeholder-text-muted" placeholder="0" readonly />
   <div class="grid grid-cols-4 gap-3">
     <button class="btn">7</button>
@@ -19,37 +19,39 @@
     
     <button class="btn">0</button>
     <button class="btn">.</button>
-    <button id="clearBtn" class="btn text-accent-red hover:text-accent-red">C</button>
+    <button class="btn text-accent-red hover:text-accent-red" data-clear>C</button>
     <button class="btn text-brand-yellow hover:text-brand-yellow-hover">+</button>
     
-    <button id="equalsBtn" class="col-span-4 btn bg-brand-yellow text-pigeon-darker font-bold hover:bg-brand-yellow-hover">=</button>
+    <button class="btn col-span-4 bg-brand-yellow text-pigeon-darker font-bold hover:bg-brand-yellow-hover" data-equals>=</button>
   </div>
 </div>
 
 <script>
-  const input = document.getElementById('calcInput');
-  const buttons = document.querySelectorAll('.btn');
-  let expression = '';
+  function initCalculator(scope) {
+    const input = scope.querySelector('#calcInput');
+    const buttons = scope.querySelectorAll('.btn');
+    let expression = '';
 
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      const val = button.textContent;
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const val = button.textContent.trim();
 
-      if (val === 'C') {
-        expression = '';
-        input.value = '0';
-      } else if (val === '=') {
-        try {
-          expression = eval(expression).toString();
-          input.value = expression;
-        } catch {
-          input.value = 'Hata';
+        if (val === 'C') {
           expression = '';
+          input.value = '0';
+        } else if (val === '=') {
+          try {
+            expression = eval(expression).toString();
+            input.value = expression;
+          } catch {
+            input.value = 'Hata';
+            expression = '';
+          }
+        } else {
+          expression += val;
+          input.value = expression;
         }
-      } else {
-        expression += val;
-        input.value = expression;
-      }
+      });
     });
-  });
+  }
 </script>
